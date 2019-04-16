@@ -1,0 +1,59 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java','../landsky-basic/src/main/java']
+        }
+        
+        /*resources {
+            srcDir 'src/resources' //资源目录
+        }*/
+    }
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+ext {
+	set('springCloudServicesVersion', '2.0.3.RELEASE')
+	set('springCloudVersion', 'Greenwich.RC2')
+}
+
+dependencies {
+	//implementation('org.springframework.boot:spring-boot-starter')
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation('org.apache.velocity:velocity-engine-core:2.0')
+	implementation project(':landsky-basic')
+}
+dependencyManagement {
+	imports {
+		mavenBom "io.pivotal.spring.cloud:spring-cloud-services-dependencies:${springCloudServicesVersion}"
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+

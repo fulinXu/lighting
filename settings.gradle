@@ -1,0 +1,3 @@
+rootProject.name = 'landsky-lighting'
+include ":landsky-basic"
+project(':landsky-basic').projectDir = new File(settingsDir, '../landsky-basic')
