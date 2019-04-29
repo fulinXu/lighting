@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,7 @@ import com.lighting.business.device.entity.LightingWithLamps;
 import com.lighting.business.device.entity.LightingWithOthers;
 import com.lighting.business.device.entity.LightingWithSensor;
 import com.lighting.business.device.service.ILightingService;
+import com.lighting.business.utils.EsClientUtil;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -37,6 +40,7 @@ import landsky.basic.common.UUIDUtils;
 import landsky.basic.log.LogType;
 import landsky.basic.annotation.LogProcessor;
 import landsky.basic.common.BaseController;
+import landsky.basic.common.JacksonUtils;
 
 /**
  * <p>
@@ -50,8 +54,13 @@ import landsky.basic.common.BaseController;
 @RequestMapping("/lighting")
 public class LightingController extends  BaseController{
 	
+	// 定义一个全局的记录器，通过LoggerFactory获取
+    private final static Logger log = LoggerFactory.getLogger(Lighting.class);
+	
 	@Autowired
 	private ILightingService lightingService;
+	@Autowired
+	private EsClientUtil esClientUtil;
 	
 	@ApiOperation("获取灯杆的信息")
 	@ApiImplicitParams({ 
@@ -102,6 +111,9 @@ public class LightingController extends  BaseController{
 		if (lighting.getProjectid()!=null&&!lighting.getProjectid().equals("")) {
 			wrapper.eq("l.PROJECTID",lighting.getProjectid());
 		}
+		if (lighting.getLightingid()!=null&&!lighting.getLightingid().equals("")) {
+			wrapper.eq("l.LIGHTINGID",lighting.getLightingid());
+		}
 		return lightingService.getLightingList(page, wrapper,getUser());
 	}	
 	
@@ -112,6 +124,9 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getLampsListByLighting")
 	public  IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, Lighting lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
 		return lightingService.getLampsListByLighting(page, wrapper,getUser());
 	}
 	
@@ -121,6 +136,9 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getAdsListByLighting")
 	public  IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, Lighting lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
 		return lightingService.getAdsListByLighting(page, wrapper, getUser());
 	}
 	
@@ -130,6 +148,9 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getCameraListByLighting")
 	public  IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, Lighting lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
 		return lightingService.getCameraListByLighting(page, wrapper, getUser());
 	}
 	
@@ -139,6 +160,9 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getAlarmListByLighting")
 	public  IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, Lighting lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
 		return lightingService.getAlarmListByLighting(page, wrapper, getUser());
 }
 
@@ -149,6 +173,9 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getSensorListByLighting")
 	public  IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, Lighting lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
 	}
 	

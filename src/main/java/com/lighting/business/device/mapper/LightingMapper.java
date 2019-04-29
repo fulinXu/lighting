@@ -43,13 +43,13 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("select l.*,a.device_name,	d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.wind_power,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
-			+ "left join t_ad_screen_device a on l.ADSCREENID=a.id "
-			+ "left join camera c on l.CAMERAID=c.id "
-			+ "left join alarm_box b on l.ALARMBOXID=b.id "
-			+ "left join (select t_evir_weather_log.wind_power,t_envir_devices.`status`,t_evir_weather_log.temperature,t_evir_weather_log.humidity,t_envir_devices.device_name,t_envir_devices.device_id from t_envir_devices LEFT JOIN t_evir_weather_log on t_evir_weather_log.device_id = t_envir_devices.device_id) d ON l.SENSORID = d.device_id " 
+	@Select("select l.*,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
+			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
+			+ "left join (select * from camera where deleted = 0) c on l.CAMERAID=c.id "
+			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
+			+ "left join (select h.atmospheric_pressure,h.temperature_soil,h.temperature,h.humidity_soil,g.`status`,h.humidity,h.pm25,h.pm10,h.co2,h.density_gas,h.illuminate,h.create_time,h.noise,g.device_name,g.device_id from (select * from t_envir_devices where deleted = 0) g LEFT JOIN  (select * from t_evir_weather_only where deleted = 0) h on h.device_id = g.device_id) d ON l.SENSORID = d.device_id " 
 			+ "left join t_bright n on l.LAMPSID=n.node_id "
-			+ "LEFT JOIN (select t_envir_hydrops_log.water,t_envir_devices.device_id from t_envir_hydrops_log LEFT JOIN t_envir_devices on t_envir_hydrops_log.device_id = t_envir_devices.device_id) f ON l.SENSORID = f.device_id  "
+			+ "LEFT JOIN (select k.water,k.create_time,j.device_id from (select * from t_envir_hydrops_only where deleted = 0) k LEFT JOIN (select * from t_envir_devices where deleted = 0) j on k.device_id = j.device_id) f ON l.SENSORID = f.device_id  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingListById(@Param("ew") Wrapper<Lighting> wrapper);
 	
@@ -69,10 +69,10 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, @Param("ew") Wrapper<Lighting> wrapper);
 	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN ("
-			+ "SELECT  d.device_id,d.deleted,d.project_id,d.area_id,d.device_name,d.`status`,w.temperature,w.wind_direction,w.wind_power,w.humidity,w.atmospheric_pressure,w.record_time As weatherrecordtime,h.create_time As waterrecordtime,h.supplier_id As watersupplierid,h.water  "
+			+ "SELECT  d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
 			+ " FROM t_envir_devices d"
-			+ " LEFT JOIN t_evir_weather_log w ON d.device_id = w.device_id "
-			+ " LEFT JOIN t_envir_hydrops_log h ON d.device_id = h.device_id"
+			+ " LEFT JOIN t_evir_weather_only w ON d.device_id = w.device_id "
+			+ " LEFT JOIN t_envir_hydrops_only h ON d.device_id = h.device_id"
 			+ ")  n ON n.device_id = l.SENSORID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, @Param("ew") Wrapper<Lighting> wrapper);
