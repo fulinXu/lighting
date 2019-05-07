@@ -1,7 +1,9 @@
 package com.lighting.business.device.controller;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,7 @@ import com.lighting.business.device.entity.LightingWithLamps;
 import com.lighting.business.device.entity.LightingWithOthers;
 import com.lighting.business.device.entity.LightingWithSensor;
 import com.lighting.business.device.service.ILightingService;
+import com.lighting.business.feign.SensorFeign;
 import com.lighting.business.utils.EsClientUtil;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,6 +40,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import landsky.basic.common.ResultWrapper;
 import landsky.basic.common.UUIDUtils;
+import landsky.basic.entity.UserHolder;
 import landsky.basic.log.LogType;
 import landsky.basic.annotation.LogProcessor;
 import landsky.basic.common.BaseController;
@@ -61,6 +65,8 @@ public class LightingController extends  BaseController{
 	private ILightingService lightingService;
 	@Autowired
 	private EsClientUtil esClientUtil;
+	@Autowired
+	private SensorFeign sensorFeign;
 	
 	@ApiOperation("获取灯杆的信息")
 	@ApiImplicitParams({ 
@@ -114,6 +120,7 @@ public class LightingController extends  BaseController{
 		if (lighting.getLightingid()!=null&&!lighting.getLightingid().equals("")) {
 			wrapper.eq("l.LIGHTINGID",lighting.getLightingid());
 		}
+		wrapper.eq("l.isdeleted",0);
 		return lightingService.getLightingList(page, wrapper,getUser());
 	}	
 	
@@ -235,7 +242,7 @@ public class LightingController extends  BaseController{
 	public  IPage<LightingWithSensor> getSensorListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
 		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
 		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
-			wrapper.like("n.device_name",lighting.getDeviceName());
+			wrapper.like("n.deviceName",lighting.getDeviceName());
 		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
 	}
@@ -275,6 +282,7 @@ public class LightingController extends  BaseController{
 		if (lighting.getLightingid()!=null&&!lighting.getLightingid().equals("")) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
 		}
+		wrapper.eq("l.isdeleted",0);
 		return lightingService.getLightingListById(wrapper,getUser());
 	}
 	
@@ -315,12 +323,13 @@ public class LightingController extends  BaseController{
 	@LogProcessor
 	@PostMapping("/updateLighting")
 	public ResultWrapper updateLighting(Lighting lighting) {
+		lighting.setIsdeleted(0);
 		if (lighting.getLightingid()==null||lighting.getLightingid().equals("")) {
 			return ResultWrapper.success(false).message("灯杆id不能为空");
 		}
 		if (lighting.getLightingname()!=null&&!lighting.getLightingname().equals("")) {
 			int count = lightingService.count(
-					Wrappers.<Lighting>query().lambda().eq(Lighting::getLightingname, lighting.getLightingname()));
+					Wrappers.<Lighting>query().lambda().eq(Lighting::getLightingname, lighting.getLightingname()).eq(Lighting::getIsdeleted,lighting.getIsdeleted()));
 			if (count > 1) {
 				return ResultWrapper.success(false).message("灯杆名称已存在");
 			}
@@ -330,7 +339,7 @@ public class LightingController extends  BaseController{
 		}
 		return ResultWrapper.success(lightingService.updateById(lighting)).message("灯杆修改失败");
 	}
-	
+
 	@ApiOperation("批量删除灯杆")
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(name = "lightingIds[]", value = "灯杆Id数组", paramType = "query", allowMultiple = true,required = true)
@@ -341,7 +350,7 @@ public class LightingController extends  BaseController{
 		if (lightingIds.length==0) {
 			return ResultWrapper.success(false).message("灯杆id不能为空");
 		}
-		return ResultWrapper.success(lightingService.removeByIds(Arrays.asList(lightingIds))).message("灯杆删除成功");
+		return lightingService.delLightingByIsdel(Arrays.asList(lightingIds)).message("灯杆删除成功");
 	}
 	
 	@ApiOperation("设备绑定")
@@ -557,6 +566,7 @@ public class LightingController extends  BaseController{
 	@GetMapping("/getLighting")
 	public Map<String,Object> getLighting(Lighting lighting){
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("isdeleted",0);
 		return lightingService.getLighting(lighting, wrapper);
 	}
 	
@@ -564,7 +574,43 @@ public class LightingController extends  BaseController{
 	public ResultWrapper getCountByAreaId(Lighting lighting) {
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",lighting.getAreaid());
+		wrapper.eq("isdeleted",0);
 		return lightingService.getCountByAreaId(wrapper, getUser());
+	}
+	
+	@GetMapping("/getLightingAllList")
+	public ResultWrapper getLightingAllList() {
+		return lightingService.getLightingListAll(UserHolder.getUser());
+	}
+	
+	//根据时间段获取区域下灯杆总能耗
+	@GetMapping("/getDailyLightingPowerByDate")
+	public ResultWrapper getDailyLightingPowerByDate(String start,String end,String projectId,String areaId) {
+		return ResultWrapper.success().object(sensorFeign.getSensorStateListByIds(start,end,lightingService.getSensorIdsByLighting(areaId, projectId)));
+	}
+	
+	//根据时间周期获取所有灯杆总能耗以及每个灯杆总能耗以及每个灯杆上每天的总能耗
+	@GetMapping("/getDailyDevicePowerByLighting")
+	public ResultWrapper getDailyDevicePowerByLighting(String start,String end,String projectId,String areaId) {
+		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId)));
+	}
+	
+	//根据时间段获取每个灯杆的总能耗
+	@GetMapping("/getJsonDailyDevicePowerByLighting")
+	public ResultWrapper getJsonDailyDevicePowerByLighting(String start,String end,String projectId,String areaId) {
+		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByLighting(start, end, lightingService.getSensorIdsByLighting(areaId, projectId)));
+	}
+	
+	//获取灯杆时间段内每天的总能耗柱状图
+	@GetMapping("/getDailyDetailByLighting")
+	public ResultWrapper getDailyDetailByLighting(String start,String end,String projectId,String areaId,String lightingid) {
+		return ResultWrapper.success().object(sensorFeign.getSensorStateListById(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid)));
+	}
+	
+	//根据灯杆id获取时间段内每天的信息折线图
+	@GetMapping("/getJsonDailyPowerStateLog")
+	public ResultWrapper getJsonDailyPowerStateLog(String start,String end,String projectId,String areaId,String lightingid) {
+		return ResultWrapper.success().object(sensorFeign.getJsonDailyPowerStateLog(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid)));
 	}
 }
 

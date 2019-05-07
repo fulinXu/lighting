@@ -12,7 +12,6 @@ import com.lighting.business.device.service.ILightingService;
 
 import landsky.basic.common.ResultWrapper;
 import landsky.basic.entity.UserHolder;
-import landsky.basic.project.feign.ProjectFeignService;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,9 +19,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landsky.basic.feign.project.ProjectFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -397,6 +399,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.in("lightingid",lightingIds);
+		wrapper.eq("isdeleted",0);
 		if (lighting.getAreaid()!=null&&!lighting.getAreaid().equals("")) {
 			wrapper.eq("areaid",lighting.getAreaid());
 		}
@@ -434,6 +437,83 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		}
 		wrapper.in("areaid",areaIds);
 		return ResultWrapper.success().object(baseMapper.selectCount(wrapper));
+	}
+
+	@Override
+	public ResultWrapper getLightingListAll(UserHolder user) {
+		// TODO Auto-generated method stub
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		if (projectIds.isEmpty()) {
+			return null;
+		}
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
+		if (areaIds.isEmpty()) {
+			return null;
+		}
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		return ResultWrapper.success().object(baseMapper.selectList(wrapper.in("projectid",projectIds).in("areaid",areaIds).eq("isdeleted",0)));
+	}
+
+	@Override
+	public ResultWrapper delLightingByIsdel(List<String> lightingList) {
+		// TODO Auto-generated method stub
+		Lighting lighting = new Lighting();
+		lighting.setIsdeleted(1);
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.in("lightingid",lightingList);
+		return ResultWrapper.success().object(baseMapper.update(lighting,wrapper));
+	}
+
+	@Override
+	public List<Map<String,String>> getSensorsByLighting(String areaId,String projectId){
+		// TODO Auto-generated method stub
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("areaid",areaId);
+		wrapper.eq("projectId",projectId);
+		List<Lighting> lightings= baseMapper.selectList(wrapper);
+		List<Map<String,String>> sensorBylightings = new ArrayList<>();
+		for(Lighting lighting : lightings) {
+			Map<String,String> map = new HashMap<>();
+			if (lighting.getSensorid()!=null&&!"".equals(lighting.getSensorid())) {
+				map.put("sensorId",lighting.getSensorid());
+				if (lighting.getLightingname()!=null&&!"".equals(lighting.getLightingname())) {
+					map.put("lightingName",lighting.getLightingname());
+				}
+				sensorBylightings.add(map);
+			}
+		}
+		return sensorBylightings;
+	}
+
+	@Override
+	public List<String> getSensorIdsByLighting(String areaId, String projectId) {
+		// TODO Auto-generated method stub
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("areaid",areaId);
+		wrapper.eq("projectId",projectId);
+		List<Lighting> lightings= baseMapper.selectList(wrapper);
+		List<String> sensorIds = new ArrayList<>();
+		for(Lighting lighting : lightings) {
+			if (lighting.getSensorid()!=null&&!"".equals(lighting.getSensorid())) {
+				sensorIds.add(lighting.getSensorid());
+			}
+		}
+		return sensorIds;
+	}
+
+	@Override
+	public String getSensorIdByLighting(String areaId, String projectId,String lightingid) {
+		// TODO Auto-generated method stub
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("areaid",areaId);
+		wrapper.eq("projectId",projectId);
+		Lighting lighting = baseMapper.selectById(lightingid);
+		if (lighting!=null) {
+			return lighting.getSensorid();
+		}
+		else {
+			return null;
+		}
 	}
 
 	

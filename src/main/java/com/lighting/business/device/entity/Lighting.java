@@ -104,12 +104,23 @@ public class Lighting  implements Serializable {
      */
     @TableField("LONGITUDE")
     private Double longitude;
+    
+    @TableField("ISDELETED")
+    private Integer isdeleted;
     /**
      * 纬度
      */
     @TableField("LATITUDE")
     private Double latitude;
-    public String getLightingid() {
+    public Integer getIsdeleted() {
+		return isdeleted;
+	}
+
+	public void setIsdeleted(Integer isdeleted) {
+		this.isdeleted = isdeleted;
+	}
+
+	public String getLightingid() {
         return lightingid;
     }
 
@@ -234,8 +245,10 @@ public class Lighting  implements Serializable {
 				+ ", areaid=" + areaid + ", projectid=" + projectid + ", lightingmodel=" + lightingmodel + ", lampsid="
 				+ lampsid + ", adscreenid=" + adscreenid + ", cameraid=" + cameraid + ", alarmboxid=" + alarmboxid
 				+ ", weatherid=" + weatherid + ", sensorid=" + sensorid + ", remark=" + remark + ", longitude="
-				+ longitude + ", latitude=" + latitude + "]";
+				+ longitude + ", isdeleted=" + isdeleted + ", latitude=" + latitude + "]";
 	}
+
+	
 
 
 }

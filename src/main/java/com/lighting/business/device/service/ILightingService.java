@@ -60,4 +60,9 @@ public interface ILightingService extends IService<Lighting> {
 	List<Map<String,Object>> getLightingByIds(List<String> lightingIds,Lighting lighting);
 	Map<String,Object> getLighting(Lighting lighting,QueryWrapper<Lighting> wrapper);
 	ResultWrapper getCountByAreaId(QueryWrapper<Lighting> wrapper,UserHolder user);
+	ResultWrapper getLightingListAll(UserHolder user);
+	ResultWrapper delLightingByIsdel(List<String> lightingList);
+	List<Map<String,String>> getSensorsByLighting(String areaId,String projectId);
+	List<String> getSensorIdsByLighting(String areaId,String projectId);
+	String getSensorIdByLighting(String areaId,String projectId,String lightingid);
 }

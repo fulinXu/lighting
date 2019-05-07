@@ -60,6 +60,33 @@ public class LightingWithOthers extends Lighting{
 	private Date waterCreateTime;
 	@TableField("platformId")
 	private String platformId;
+	@TableField("cardNumber")
+	private String cardNumber;
+	@TableField("voltage")
+	private String voltage;
+	@TableField("currentLevel")
+	private String currentLevel;
+	@TableField("powerfactor")
+	private String powerfactor;
+	
+	public String getVoltage() {
+		return voltage;
+	}
+	public void setVoltage(String voltage) {
+		this.voltage = voltage;
+	}
+	public String getCurrentLevel() {
+		return currentLevel;
+	}
+	public void setCurrentLevel(String currentLevel) {
+		this.currentLevel = currentLevel;
+	}
+	public String getPowerfactor() {
+		return powerfactor;
+	}
+	public void setPowerfactor(String powerfactor) {
+		this.powerfactor = powerfactor;
+	}
 	public Integer getSensorStatus() {
 		return sensorStatus;
 	}
@@ -227,6 +254,12 @@ public class LightingWithOthers extends Lighting{
 	}
 	public void setNodeId(String nodeId) {
 		this.nodeId = nodeId;
+	}
+	public String getCardNumber() {
+		return cardNumber;
+	}
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 	
 }

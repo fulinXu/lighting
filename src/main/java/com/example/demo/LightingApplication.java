@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 //服务间调用方法的注解
-@EnableFeignClients(basePackages=LandskyBasic.PACKAGE)
+@EnableFeignClients({LandskyBasic.PACKAGE,"com.lighting.business.*"})
 @EnableEurekaClient
 @ComponentScan(basePackages = {"com.lighting.*","landsky.basic"}) 
 public class LightingApplication {

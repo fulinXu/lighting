@@ -34,7 +34,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	 * @param wrapper
 	 * @return
 	 */
-	@Select("select l.*,a.device_name  as adscreenName,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
+	@Select("select l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
@@ -43,7 +43,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("select l.*,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
+	@Select("select l.*,n.voltage,n.current_level As currentLevel,n.powerfactor,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
@@ -53,22 +53,22 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingListById(@Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN t_bright n ON n.NODE_ID = l.LAMPSID  "
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_bright n ON n.NODE_ID = l.LAMPSID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN t_ad_screen_device  n ON n.id = l.ADSCREENID  "
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_ad_screen_device  n ON n.id = l.ADSCREENID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN camera  n ON n.id = l.CAMERAID  "
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN camera  n ON n.id = l.CAMERAID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN alarm_box  n ON n.id = l.ALARMBOXID  "
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN alarm_box  n ON n.id = l.ALARMBOXID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, @Param("ew") Wrapper<Lighting> wrapper);
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  t_lighting l  RIGHT JOIN ("
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN ("
 			+ "SELECT  d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
 			+ " FROM t_envir_devices d"
 			+ " LEFT JOIN t_evir_weather_only w ON d.device_id = w.device_id "
@@ -137,19 +137,19 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+"${ew.customSqlSegment}")
 	int sensorLoseBind(@Param("ew") Wrapper<Object> wrapper);
 	
-	@Select("SELECT  *  FROM 	t_lighting right JOIN t_ad_screen_device ON t_ad_screen_device.id = t_lighting.ADSCREENID where LIGHTINGID is NULL  and deleted = '0' OR LIGHTINGID='' ")
+	@Select("SELECT  *  FROM 	t_lighting right JOIN t_ad_screen_device ON t_ad_screen_device.id = t_lighting.ADSCREENID where LIGHTINGID is NULL  and deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithAds> getAdscreenNotBind();
 	
-	@Select("SELECT  *  FROM 	t_lighting right JOIN t_envir_devices ON t_envir_devices.device_id = t_lighting.SENSORID where LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID=''")
+	@Select("SELECT  *  FROM 	t_lighting right JOIN t_envir_devices ON t_envir_devices.device_id = t_lighting.SENSORID where LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithSensor> getSensorNotBind();
 	
-	@Select("SELECT  *  FROM 	t_lighting right JOIN alarm_box ON alarm_box.id = t_lighting.ALARMBOXID where LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID=''")
+	@Select("SELECT  *  FROM 	t_lighting right JOIN alarm_box ON alarm_box.id = t_lighting.ALARMBOXID where LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithAlarm> getAlarmNotBind();
 	
-	@Select("SELECT  *  FROM 	t_lighting right JOIN t_bright ON t_bright.NODE_ID = t_lighting.LAMPSID where LIGHTINGID is NULL  OR LIGHTINGID=''")
+	@Select("SELECT  *  FROM 	t_lighting   right JOIN t_bright ON t_bright.NODE_ID = t_lighting.LAMPSID where LIGHTINGID is NULL  OR LIGHTINGID='' and t_lighting.isdeleted = '0'")
 	List<LightingWithLamps> getBrightNotBind();
 	
-	@Select("SELECT	*  FROM 	t_lighting RIGHT JOIN camera ON CAMERAID =id WHERE	LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = ''")
+	@Select("SELECT	*  FROM 	t_lighting RIGHT JOIN camera ON CAMERAID =id WHERE	LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = '' and isdeleted = '0'")
 	List<LightingWithCamera> getCameraNotBind();
 
 
