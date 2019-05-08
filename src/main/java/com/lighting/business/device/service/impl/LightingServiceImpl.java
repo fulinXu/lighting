@@ -85,6 +85,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 			return page;
 		}
 		wrapper.in("n.projectid", projectIds);
+		wrapper.in("n.isdeleted",0);
 		return page.setRecords(baseMapper.getLampsListByLighting(page, wrapper));
 	}
 	
