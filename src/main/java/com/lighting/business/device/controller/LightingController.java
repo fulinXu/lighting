@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landsky.basic.feign.envir.EnvirFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ import com.lighting.business.device.entity.LightingWithLamps;
 import com.lighting.business.device.entity.LightingWithOthers;
 import com.lighting.business.device.entity.LightingWithSensor;
 import com.lighting.business.device.service.ILightingService;
-import com.lighting.business.feign.SensorFeign;
 import com.lighting.business.utils.EsClientUtil;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -66,7 +66,7 @@ public class LightingController extends  BaseController{
 	@Autowired
 	private EsClientUtil esClientUtil;
 	@Autowired
-	private SensorFeign sensorFeign;
+	private EnvirFeignService sensorFeign;
 	
 	@ApiOperation("获取灯杆的信息")
 	@ApiImplicitParams({ 
