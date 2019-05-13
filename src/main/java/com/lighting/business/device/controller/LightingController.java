@@ -33,7 +33,6 @@ import com.lighting.business.device.entity.LightingWithLamps;
 import com.lighting.business.device.entity.LightingWithOthers;
 import com.lighting.business.device.entity.LightingWithSensor;
 import com.lighting.business.device.service.ILightingService;
-import com.lighting.business.utils.EsClientUtil;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -63,8 +62,8 @@ public class LightingController extends  BaseController{
 	
 	@Autowired
 	private ILightingService lightingService;
-	@Autowired
-	private EsClientUtil esClientUtil;
+//	@Autowired
+//	private EsClientUtil esClientUtil;
 	@Autowired
 	private EnvirFeignService sensorFeign;
 	
