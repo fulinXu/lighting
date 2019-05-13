@@ -589,7 +589,7 @@ public class LightingController extends  BaseController{
 	}
 	
 	//根据时间周期获取所有灯杆总能耗以及每个灯杆总能耗以及每个灯杆上每天的总能耗
-	@GetMapping("/getDailyDevicePowerByLighting")
+	@RequestMapping("/getDailyDevicePowerByLighting")
 	public ResultWrapper getDailyDevicePowerByLighting(String start,String end,String projectId,String areaId,int pageIndex,int pageSize) {
 		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId),pageIndex,pageSize));
 	}
@@ -607,7 +607,7 @@ public class LightingController extends  BaseController{
 	}
 	
 	//根据灯杆id获取时间段内每天的信息折线图
-	@GetMapping("/getJsonDailyPowerStateLog")
+	@RequestMapping("/getJsonDailyPowerStateLog")
 	public ResultWrapper getJsonDailyPowerStateLog(String start,String end,String projectId,String areaId,String lightingid,int pageIndex,int pageSize) {
 		return ResultWrapper.success().object(sensorFeign.getJsonDailyPowerStateLog(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid),pageIndex,pageSize));
 	}
