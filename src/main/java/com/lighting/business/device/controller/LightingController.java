@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import landsky.basic.feign.envir.EnvirFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -591,7 +593,7 @@ public class LightingController extends  BaseController{
 	//根据时间周期获取所有灯杆总能耗以及每个灯杆总能耗以及每个灯杆上每天的总能耗
 	@RequestMapping("/getDailyDevicePowerByLighting")
 	public ResultWrapper getDailyDevicePowerByLighting(String start,String end,String projectId,String areaId,int pageIndex,int pageSize) {
-		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId),pageIndex,pageSize));
+		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize),pageIndex,pageSize));
 	}
 	
 	//根据时间段获取每个灯杆的总能耗
@@ -612,10 +614,28 @@ public class LightingController extends  BaseController{
 		return ResultWrapper.success().object(sensorFeign.getJsonDailyPowerStateLog(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid),pageIndex,pageSize));
 	}
 
-	//根据时间段获取每个灯杆的总能耗
+	//根据时间周期分页获取所有灯杆总能耗以及每个灯杆总能耗以及每个灯杆上每天的总能耗
 	@GetMapping("/getJsonDailyDevicePowerByDateAndDeviceIds")
-	public ResultWrapper getJsonDailyDevicePowerByDateAndDeviceIds(String start,String end,String projectId,String areaId,int pageIndex,int pageSize) {
-		return ResultWrapper.success().object(sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId),pageIndex,pageSize));
+	public IPage<JSONObject> getJsonDailyDevicePowerByDateAndDeviceIds(IPage<JSONObject> page, String start, String end, String projectId, String areaId, int pageIndex, int pageSize) throws JSONException {
+		JSONObject data = new JSONObject();
+		data.put("data",sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize),pageIndex,pageSize));
+		List<JSONObject>  list = new ArrayList<>();
+		list.add(data);
+		int total = 0;
+		total = lightingService.getTotalSensorsByLighting(areaId,projectId);
+		page.setRecords(list);
+		page.setSize(pageSize);
+		page.setCurrent(pageIndex);
+		page.setTotal(total);
+		int pages = 0;
+		if (total%pageSize==0){
+			pages = total/pageSize;
+		}
+		else {
+			pages = total/pageSize + 1;
+		}
+		page.setPages(pages);
+		return page;
 	}
 }
 

@@ -466,12 +466,13 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public List<Map<String,String>> getSensorsByLighting(String areaId,String projectId){
+	public List<Map<String,String>> getSensorsByLighting(String areaId,String projectId,int pageIndex,int pageSize){
 		// TODO Auto-generated method stub
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",areaId);
 		wrapper.eq("projectId",projectId);
-		List<Lighting> lightings= baseMapper.selectList(wrapper);
+		int current = (pageIndex-1)*pageSize;
+		List<Lighting> lightings= (List<Lighting>) baseMapper.selectListPage(wrapper,current,pageSize);
 		List<Map<String,String>> sensorBylightings = new ArrayList<>();
 		for(Lighting lighting : lightings) {
 			Map<String,String> map = new HashMap<>();
@@ -484,6 +485,16 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 			}
 		}
 		return sensorBylightings;
+	}
+
+	@Override
+	public int getTotalSensorsByLighting(String areaId, String projectId) {
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("areaid",areaId);
+		wrapper.eq("projectId",projectId);
+		int i = baseMapper.selectCount(wrapper);
+		System.out.println(i+"-----------------------------");
+		return i;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.lighting.business.device.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lighting.business.device.entity.Lighting;
 import com.lighting.business.device.entity.LightingWithAds;
 import com.lighting.business.device.entity.LightingWithAlarm;
@@ -152,5 +153,6 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	@Select("SELECT	*  FROM 	t_lighting RIGHT JOIN camera ON CAMERAID =id WHERE	LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = '' and isdeleted = '0'")
 	List<LightingWithCamera> getCameraNotBind();
 
-
+	@Select("select * from t_lighting  ${ew.customSqlSegment} limit #{current}, #{pageSize}")
+	List<Lighting>  selectListPage(@Param("ew") QueryWrapper<Lighting> wrapper, @Param("current") int current, @Param("pageSize") int pageSize);
 }

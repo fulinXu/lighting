@@ -62,7 +62,8 @@ public interface ILightingService extends IService<Lighting> {
 	ResultWrapper getCountByAreaId(QueryWrapper<Lighting> wrapper,UserHolder user);
 	ResultWrapper getLightingListAll(UserHolder user);
 	ResultWrapper delLightingByIsdel(List<String> lightingList);
-	List<Map<String,String>> getSensorsByLighting(String areaId,String projectId);
+	List<Map<String,String>> getSensorsByLighting(String areaId,String projectId,int pageIndex,int pageSize);
+	int getTotalSensorsByLighting(String areaId,String projectId);
 	List<String> getSensorIdsByLighting(String areaId,String projectId);
 	String getSensorIdByLighting(String areaId,String projectId,String lightingid);
 }
