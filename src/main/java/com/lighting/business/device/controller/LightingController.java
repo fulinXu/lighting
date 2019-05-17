@@ -1,11 +1,8 @@
 package com.lighting.business.device.controller;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -611,13 +608,50 @@ public class LightingController extends  BaseController{
 	//根据灯杆id获取时间段内每天的信息折线图
 	@RequestMapping("/getJsonDailyPowerStateLog")
 	public ResultWrapper getJsonDailyPowerStateLog(String start,String end,String projectId,String areaId,String lightingid,int pageIndex,int pageSize) {
+		if (end==null||"".equals(end)){
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+			end = df.format(new Date());// new Date()为获取当前系统时间
+		}
+		if (start==null||"".equals(start)){
+			//获取当前时间过去7天的日期
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - 7);
+			Date today = calendar.getTime();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			start = format.format(today);
+		}
+		String useSensorId = lightingService.getSensorIdByLighting(areaId, projectId,lightingid);
+		if (useSensorId==null){
+		    return  ResultWrapper.success().object("该灯杆未绑定工控机");
+        }
 		return ResultWrapper.success().object(sensorFeign.getJsonDailyPowerStateLog(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid),pageIndex,pageSize));
 	}
 
 	//根据时间周期分页获取所有灯杆总能耗以及每个灯杆总能耗以及每个灯杆上每天的总能耗
 	@GetMapping("/getJsonDailyDevicePowerByDateAndDeviceIds")
 	public IPage<JSONObject> getJsonDailyDevicePowerByDateAndDeviceIds(IPage<JSONObject> page, String start, String end, String projectId, String areaId, int pageIndex, int pageSize) throws JSONException {
+		if (end==null||"".equals(end)){
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+			end = df.format(new Date());// new Date()为获取当前系统时间
+		}
+		if (start==null||"".equals(start)){
+			//获取当前时间过去7天的日期
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR) - 7);
+			Date today = calendar.getTime();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			start = format.format(today);
+		}
 		JSONObject data = new JSONObject();
+		if(lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize)==null){
+			List<JSONObject> b = new ArrayList<>();
+			JSONObject a = new JSONObject();
+			String remark = "当前页灯杆未绑定工控机";
+			a.put("remark",remark);
+			b.add(a);
+			page.setRecords(b);
+			return  page;
+		}
 		data.put("data",sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize),pageIndex,pageSize));
 		List<JSONObject>  list = new ArrayList<>();
 		list.add(data);

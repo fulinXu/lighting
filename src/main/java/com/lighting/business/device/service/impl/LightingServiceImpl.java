@@ -471,6 +471,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",areaId);
 		wrapper.eq("projectId",projectId);
+		wrapper.eq("isdeleted",0);
 		int current = (pageIndex-1)*pageSize;
 		List<Lighting> lightings= (List<Lighting>) baseMapper.selectListPage(wrapper,current,pageSize);
 		List<Map<String,String>> sensorBylightings = new ArrayList<>();
@@ -484,6 +485,9 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 				sensorBylightings.add(map);
 			}
 		}
+		if (sensorBylightings.size()==0){
+			return  null;
+		}
 		return sensorBylightings;
 	}
 
@@ -492,8 +496,10 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",areaId);
 		wrapper.eq("projectId",projectId);
+		wrapper.isNotNull("sensorid");
+		wrapper.ne("sensorid","");
+		wrapper.eq("isdeleted",0);
 		int i = baseMapper.selectCount(wrapper);
-		System.out.println(i+"-----------------------------");
 		return i;
 	}
 
@@ -503,6 +509,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",areaId);
 		wrapper.eq("projectId",projectId);
+		wrapper.eq("isdeleted",0);
 		List<Lighting> lightings= baseMapper.selectList(wrapper);
 		List<String> sensorIds = new ArrayList<>();
 		for(Lighting lighting : lightings) {
@@ -519,6 +526,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.eq("areaid",areaId);
 		wrapper.eq("projectId",projectId);
+		wrapper.eq("isdeleted",0);
 		Lighting lighting = baseMapper.selectById(lightingid);
 		if (lighting!=null) {
 			return lighting.getSensorid();
