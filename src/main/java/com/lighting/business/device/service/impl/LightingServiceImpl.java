@@ -469,24 +469,26 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	public List<Map<String,String>> getSensorsByLighting(String areaId,String projectId,int pageIndex,int pageSize){
 		// TODO Auto-generated method stub
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		wrapper.eq("areaid",areaId);
-		wrapper.eq("projectId",projectId);
+        if (areaId!=null&&!"".equals(areaId)){
+            wrapper.eq("areaid",areaId);
+        }
+        if (projectId!=null&&!"".equals(projectId)){
+            wrapper.eq("projectId",projectId);
+        }
 		wrapper.eq("isdeleted",0);
 		int current = (pageIndex-1)*pageSize;
 		List<Lighting> lightings= (List<Lighting>) baseMapper.selectListPage(wrapper,current,pageSize);
 		List<Map<String,String>> sensorBylightings = new ArrayList<>();
 		for(Lighting lighting : lightings) {
 			Map<String,String> map = new HashMap<>();
-			if (lighting.getSensorid()!=null&&!"".equals(lighting.getSensorid())) {
-				map.put("sensorId",lighting.getSensorid());
-				if (lighting.getLightingname()!=null&&!"".equals(lighting.getLightingname())) {
-					map.put("lightingName",lighting.getLightingname());
-				}
-				sensorBylightings.add(map);
-			}
-		}
-		if (sensorBylightings.size()==0){
-			return  null;
+            if (lighting.getLightingname()!=null&&!"".equals(lighting.getLightingname())) {
+                if (lighting.getSensorid()!=null&&!"".equals(lighting.getSensorid())) {
+                    map.put("sensorId",lighting.getSensorid());
+
+                }
+                map.put("lightingName",lighting.getLightingname());
+                sensorBylightings.add(map);
+            }
 		}
 		return sensorBylightings;
 	}
@@ -494,8 +496,12 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	@Override
 	public int getTotalSensorsByLighting(String areaId, String projectId) {
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		wrapper.eq("areaid",areaId);
-		wrapper.eq("projectId",projectId);
+        if (areaId!=null&&!"".equals(areaId)){
+            wrapper.eq("areaid",areaId);
+        }
+        if (projectId!=null&&!"".equals(projectId)){
+            wrapper.eq("projectId",projectId);
+        }
 		wrapper.isNotNull("sensorid");
 		wrapper.ne("sensorid","");
 		wrapper.eq("isdeleted",0);
@@ -507,8 +513,12 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	public List<String> getSensorIdsByLighting(String areaId, String projectId) {
 		// TODO Auto-generated method stub
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		wrapper.eq("areaid",areaId);
-		wrapper.eq("projectId",projectId);
+        if (areaId!=null&&!"".equals(areaId)){
+            wrapper.eq("areaid",areaId);
+        }
+        if (projectId!=null&&!"".equals(projectId)){
+            wrapper.eq("projectId",projectId);
+        }
 		wrapper.eq("isdeleted",0);
 		List<Lighting> lightings= baseMapper.selectList(wrapper);
 		List<String> sensorIds = new ArrayList<>();
@@ -524,8 +534,12 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	public String getSensorIdByLighting(String areaId, String projectId,String lightingid) {
 		// TODO Auto-generated method stub
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		wrapper.eq("areaid",areaId);
-		wrapper.eq("projectId",projectId);
+		if (areaId!=null&&!"".equals(areaId)){
+            wrapper.eq("areaid",areaId);
+        }
+		if (projectId!=null&&!"".equals(projectId)){
+            wrapper.eq("projectId",projectId);
+        }
 		wrapper.eq("isdeleted",0);
 		Lighting lighting = baseMapper.selectById(lightingid);
 		if (lighting!=null) {

@@ -24,7 +24,7 @@ public class LightingWithOthers extends Lighting{
 	private  BigDecimal brightness;
 	@TableField("deviceAliasc")
 	private  String deviceAliasc;
-	@TableField("camera_state")
+	@TableField("cameraState")
 	private  Integer cameraState;
 	@TableField("sensorStatus")
 	private  Integer sensorStatus;
@@ -68,8 +68,28 @@ public class LightingWithOthers extends Lighting{
 	private String currentLevel;
 	@TableField("powerfactor")
 	private String powerfactor;
-	
-	public String getVoltage() {
+	@TableField("verifyCode")
+	private String verifyCode;
+    @TableField("alarmState")
+    private Integer alarmState;
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
+    public Integer getAlarmState() {
+        return alarmState;
+    }
+
+    public void setAlarmState(Integer alarmState) {
+        this.alarmState = alarmState;
+    }
+
+    public String getVoltage() {
 		return voltage;
 	}
 	public void setVoltage(String voltage) {

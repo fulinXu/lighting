@@ -643,15 +643,6 @@ public class LightingController extends  BaseController{
 			start = format.format(today);
 		}
 		JSONObject data = new JSONObject();
-		if(lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize)==null){
-			List<JSONObject> b = new ArrayList<>();
-			JSONObject a = new JSONObject();
-			String remark = "当前页灯杆未绑定工控机";
-			a.put("remark",remark);
-			b.add(a);
-			page.setRecords(b);
-			return  page;
-		}
 		data.put("data",sensorFeign.getJsonDailyDevicePowerByDateAndDeviceIds(start, end, lightingService.getSensorsByLighting(areaId, projectId,pageIndex,pageSize),pageIndex,pageSize));
 		List<JSONObject>  list = new ArrayList<>();
 		list.add(data);
