@@ -147,7 +147,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	@Select("SELECT  *  FROM 	t_lighting right JOIN alarm_box ON alarm_box.id = t_lighting.ALARMBOXID where LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithAlarm> getAlarmNotBind();
 	
-	@Select("SELECT  *  FROM 	t_lighting   right JOIN t_bright ON t_bright.NODE_ID = t_lighting.LAMPSID where LIGHTINGID is NULL  OR LIGHTINGID='' and t_lighting.isdeleted = '0'")
+	@Select("SELECT  *  FROM 	t_lighting   right JOIN t_bright ON t_bright.NODE_ID = t_lighting.LAMPSID where LIGHTINGID is NULL  OR LIGHTINGID='' and t_lighting.isdeleted = '0' and t_bright.isdeleted='0'")
 	List<LightingWithLamps> getBrightNotBind();
 	
 	@Select("SELECT	*  FROM 	t_lighting RIGHT JOIN camera ON CAMERAID =id WHERE	LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = '' and isdeleted = '0'")
