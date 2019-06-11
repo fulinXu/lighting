@@ -1,12 +1,6 @@
 package com.lighting.business.device.service.impl;
 
-import com.lighting.business.device.entity.Lighting;
-import com.lighting.business.device.entity.LightingWithAds;
-import com.lighting.business.device.entity.LightingWithAlarm;
-import com.lighting.business.device.entity.LightingWithCamera;
-import com.lighting.business.device.entity.LightingWithLamps;
-import com.lighting.business.device.entity.LightingWithOthers;
-import com.lighting.business.device.entity.LightingWithSensor;
+import com.lighting.business.device.entity.*;
 import com.lighting.business.device.mapper.LightingMapper;
 import com.lighting.business.device.service.ILightingService;
 
@@ -24,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import landsky.basic.feign.envir.EnvirFeignService;
 import landsky.basic.feign.project.ProjectFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +36,9 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 
 	@Autowired
 	private ProjectFeignService projectFeignService;
+
+	@Autowired
+	private EnvirFeignService sensorFeign;
 	
 	@Override
 	public IPage<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, QueryWrapper<Lighting> wrapper,UserHolder user) {
@@ -143,6 +141,50 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		return page.setRecords(baseMapper.getSensorListByLighting(page, wrapper));
+	}
+
+	@Override
+	public IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		if (projectIds.isEmpty()) {
+			return page;
+		}
+		List<Integer> typeList = new ArrayList<>();
+		typeList.add(1);
+		typeList.add(3);
+		wrapper.in("n.project_id", projectIds);
+		wrapper.in("n.deleted",0);
+		wrapper.in("n.device_type",typeList);
+		return page.setRecords(baseMapper.getSensorListByLighting(page, wrapper));
+	}
+
+	@Override
+	public IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		if (projectIds.isEmpty()) {
+			return page;
+		}
+		List<Integer> typeList = new ArrayList<>();
+		typeList.add(2);
+		typeList.add(3);
+		wrapper.in("n.project_id", projectIds);
+		wrapper.in("n.deleted",0);
+		wrapper.in("n.device_type",typeList);
+		return page.setRecords(baseMapper.getSensorListByLighting(page, wrapper));
+	}
+
+	@Override
+	public IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<Lighting> wrapper,
+														   UserHolder user) {
+		// TODO Auto-generated method stub
+		System.out.println("sql:" + wrapper.getCustomSqlSegment());
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		if (projectIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.project_id", projectIds);
+		wrapper.in("n.deleted",0);
+		return page.setRecords(baseMapper.getEvseListByLighting(page, wrapper));
 	}
 
 	@Override
@@ -550,6 +592,21 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		}
 	}
 
-	
-	
+    @Override
+    public List<Object> getIPCIds(QueryWrapper<Lighting> wrapper) {
+	    List<String> IPCIds = new ArrayList<>();
+	    List<Lighting> lightings = baseMapper.selectList(wrapper);
+	    for (Lighting lighting : lightings){
+	        if(lighting.getSensorid()!=null&&!"".equals(lighting.getSensorid())){
+                IPCIds.add(lighting.getSensorid());
+            }
+        }
+	    if (IPCIds.size()==0){
+	        return  null;
+        }
+        List<Object> IPCs = sensorFeign.getDeviceListByIds(IPCIds);
+        return IPCs;
+    }
+
+
 }

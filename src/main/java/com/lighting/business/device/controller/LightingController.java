@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.lighting.business.device.entity.*;
 import landsky.basic.feign.envir.EnvirFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +25,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lighting.business.device.entity.Lighting;
-import com.lighting.business.device.entity.LightingWithAds;
-import com.lighting.business.device.entity.LightingWithAlarm;
-import com.lighting.business.device.entity.LightingWithCamera;
-import com.lighting.business.device.entity.LightingWithLamps;
-import com.lighting.business.device.entity.LightingWithOthers;
-import com.lighting.business.device.entity.LightingWithSensor;
 import com.lighting.business.device.service.ILightingService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -134,7 +128,7 @@ public class LightingController extends  BaseController{
 		}
 		return lightingService.getLampsListByLighting(page, wrapper,getUser());
 	}
-	
+
 	@ApiOperation("通过灯杆获取广告屏的信息")
 	@ApiImplicitParams({ 
 	})
@@ -146,7 +140,7 @@ public class LightingController extends  BaseController{
 		}
 		return lightingService.getAdsListByLighting(page, wrapper, getUser());
 	}
-	
+
 	@ApiOperation("通过灯杆获取摄像头的信息")
 	@ApiImplicitParams({ 
 	})
@@ -173,7 +167,7 @@ public class LightingController extends  BaseController{
 
 
 	@ApiOperation("通过灯杆获取传感器的信息")
-	@ApiImplicitParams({ 
+	@ApiImplicitParams({
 	})
 	@GetMapping("/getSensorListByLighting")
 	public  IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, Lighting lighting){
@@ -182,6 +176,42 @@ public class LightingController extends  BaseController{
 			wrapper.eq("l.lightingid",lighting.getLightingid());
 		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
+	}
+
+	@ApiOperation("通过灯杆获取充电桩的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getEvseListByLighting")
+	public  IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, Lighting lighting){
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		return lightingService.getEvseListByLighting(page, wrapper, getUser());
+	}
+
+	@ApiOperation("通过灯杆获取气象站的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getWeatherListByLighting")
+	public  IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, Lighting lighting){
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		return lightingService.getWeatherListByLighting(page, wrapper, getUser());
+	}
+
+	@ApiOperation("通过灯杆获取积水传感器的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getWaterListByLighting")
+	public  IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, Lighting lighting){
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
+			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		return lightingService.getWaterListByLighting(page, wrapper, getUser());
 	}
 	
 	@ApiOperation("通过模糊查询灯杆获取灯具的信息")
@@ -244,7 +274,44 @@ public class LightingController extends  BaseController{
 		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
 	}
-	
+
+
+	@ApiOperation("通过灯杆模糊获取充电桩的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getEvseListByLightingLike")
+	public  IPage<LightingWithEvse> getEvseListByLightingLike(Page<LightingWithEvse> page, LightingWithEvse lighting) {
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getDZMC() != null && !"".equals(lighting.getDZMC())) {
+			wrapper.like("n.DZMC", lighting.getDZMC());
+		}
+		return lightingService.getEvseListByLighting(page, wrapper, getUser());
+	}
+
+	@ApiOperation("通过灯杆模糊获取气象站的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getWeatherListByLightingLike")
+	public  IPage<LightingWithSensor> getWeatherListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+			wrapper.like("n.deviceName",lighting.getDeviceName());
+		}
+		return lightingService.getWeatherListByLighting(page, wrapper, getUser());
+	}
+
+	@ApiOperation("通过灯杆模糊获取积水传感器的信息")
+	@ApiImplicitParams({
+	})
+	@GetMapping("/getWaterListByLightingLike")
+	public  IPage<LightingWithSensor> getWaterListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
+		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+			wrapper.like("n.deviceName",lighting.getDeviceName());
+		}
+		return lightingService.getWaterListByLighting(page, wrapper, getUser());
+	}
+
 	@ApiOperation("根据id获取灯杆的信息")
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(dataType = "String",name = "lightingid", value = "灯杆Id", paramType = "query", required = true)
@@ -336,6 +403,15 @@ public class LightingController extends  BaseController{
 			return ResultWrapper.success(lightingService.updateById(lighting)).message("灯杆修改成功");
 		}
 		return ResultWrapper.success(lightingService.updateById(lighting)).message("灯杆修改失败");
+	}
+
+	//获取项目区域下的工控机id
+	@GetMapping("/getIPCIds")
+	public ResultWrapper getIPCIds(Lighting lighting){
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("isdeleted",0);
+		wrapper.eq("projectid",lighting.getProjectid());
+		return  ResultWrapper.success().object(lightingService.getIPCIds(wrapper));
 	}
 
 	@ApiOperation("批量删除灯杆")

@@ -1,13 +1,7 @@
 package com.lighting.business.device.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lighting.business.device.entity.Lighting;
-import com.lighting.business.device.entity.LightingWithAds;
-import com.lighting.business.device.entity.LightingWithAlarm;
-import com.lighting.business.device.entity.LightingWithCamera;
-import com.lighting.business.device.entity.LightingWithLamps;
-import com.lighting.business.device.entity.LightingWithOthers;
-import com.lighting.business.device.entity.LightingWithSensor;
+import com.lighting.business.device.entity.*;
 
 import java.util.List;
 
@@ -70,14 +64,18 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, @Param("ew") Wrapper<Lighting> wrapper);
 	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN ("
-			+ "SELECT  d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
+			+ "SELECT  d.device_type,d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
 			+ " FROM t_envir_devices d"
 			+ " LEFT JOIN t_evir_weather_only w ON d.device_id = w.device_id "
 			+ " LEFT JOIN t_envir_hydrops_only h ON d.device_id = h.device_id"
 			+ ")  n ON n.device_id = l.SENSORID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, @Param("ew") Wrapper<Lighting> wrapper);
-	
+
+	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_evse_device  n ON n.DZBH = l.EVSEID  "
+			+ "${ew.customSqlSegment}")
+	List<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, @Param("ew") Wrapper<Lighting> wrapper);
+
 	@Update("update t_ad_screen_device set bind_id = #{bindId}  " 
 			+"${ew.customSqlSegment}")
 	int adscreenBind(@Param("bindId") String bindId, @Param("ew") Wrapper<Object> wrapper);

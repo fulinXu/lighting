@@ -1,12 +1,6 @@
 package com.lighting.business.device.service;
 
-import com.lighting.business.device.entity.Lighting;
-import com.lighting.business.device.entity.LightingWithAds;
-import com.lighting.business.device.entity.LightingWithAlarm;
-import com.lighting.business.device.entity.LightingWithCamera;
-import com.lighting.business.device.entity.LightingWithLamps;
-import com.lighting.business.device.entity.LightingWithOthers;
-import com.lighting.business.device.entity.LightingWithSensor;
+import com.lighting.business.device.entity.*;
 
 import landsky.basic.common.ResultWrapper;
 import landsky.basic.entity.UserHolder;
@@ -37,6 +31,9 @@ public interface ILightingService extends IService<Lighting> {
 	IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, QueryWrapper<Lighting> wrapper,UserHolder user);
 	IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, QueryWrapper<Lighting> wrapper,UserHolder user);
 	IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
+	IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
+	IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
+	IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<Lighting> wrapper, UserHolder user);
 	boolean adscreenBind(String adscreenId,QueryWrapper<Object> wrapper,String bindid);
 	boolean alarmboxBind(String alarmId,QueryWrapper<Object> wrapper,String bindid);
 	boolean cameraBind(String cameraId,QueryWrapper<Object> wrapper,String bindid);
@@ -66,4 +63,5 @@ public interface ILightingService extends IService<Lighting> {
 	int getTotalSensorsByLighting(String areaId,String projectId);
 	List<String> getSensorIdsByLighting(String areaId,String projectId);
 	String getSensorIdByLighting(String areaId,String projectId,String lightingid);
+	List<Object> getIPCIds(QueryWrapper<Lighting> wrapper);
 }
