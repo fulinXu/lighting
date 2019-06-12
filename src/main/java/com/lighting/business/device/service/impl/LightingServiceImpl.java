@@ -386,8 +386,8 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	public IPage<LightingWithAds> getAdscreenNotBind(Page<LightingWithAds> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
         QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-        wrapper.eq("t_ad_screen_device.projectid",lighting.getProjectid());
-        wrapper.eq("t_ad_screen_device.areaid",lighting.getAreaid());
+        wrapper.eq("t_ad_screen_device.project_id",lighting.getProjectid());
+        wrapper.eq("t_ad_screen_device.area_id",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -619,6 +619,15 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
         }
         List<Object> IPCs = sensorFeign.getDeviceListByIds(IPCIds);
         return IPCs;
+    }
+
+    @Override
+    public Boolean isBinding(QueryWrapper<Lighting> wrapper) {
+        int count = baseMapper.selectCount(wrapper);
+        if (count>0){
+            return true;
+        }
+        return false;
     }
 
 

@@ -64,4 +64,5 @@ public interface ILightingService extends IService<Lighting> {
 	List<String> getSensorIdsByLighting(String areaId,String projectId);
 	String getSensorIdByLighting(String areaId,String projectId,String lightingid);
 	List<Object> getIPCIds(QueryWrapper<Lighting> wrapper);
+	Boolean isBinding(QueryWrapper<Lighting> wrapper);
 }

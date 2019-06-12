@@ -426,6 +426,26 @@ public class LightingController extends  BaseController{
 		}
 		return lightingService.delLightingByIsdel(Arrays.asList(lightingIds)).message("灯杆删除成功");
 	}
+
+	//是否包含已绑定的设备
+	@GetMapping("/isBinding")
+	public  Boolean isBinding(String[] deviceIds,String projectId,String areaId){
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		if (projectId!=null&&!"".equals(projectId)){
+			if (areaId!=null&&!"".equals(areaId)){
+				wrapper.eq("projectid",projectId);
+				wrapper.eq("areaid",areaId);
+				return  !lightingService.isBinding(wrapper);
+			}
+			return  true;
+		}
+		wrapper.in("lampsid",Arrays.asList(deviceIds));
+		wrapper.in("adscreenid",Arrays.asList(deviceIds));
+		wrapper.in("cameraid",Arrays.asList(deviceIds));
+		wrapper.in("alarmboxid",Arrays.asList(deviceIds));
+		wrapper.in("sensorid",Arrays.asList(deviceIds));
+		return  lightingService.isBinding(wrapper);
+	}
 	
 	@ApiOperation("设备绑定")
 	@ApiImplicitParams({ 

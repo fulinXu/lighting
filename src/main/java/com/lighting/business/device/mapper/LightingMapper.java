@@ -138,27 +138,27 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	
 	@Select("SELECT  *  FROM 	t_lighting right JOIN t_ad_screen_device ON t_ad_screen_device.id = t_lighting.ADSCREENID "
 			+"${ew.customSqlSegment}"
-			+"and LIGHTINGID is NULL  and deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
+			+" and LIGHTINGID is NULL  and deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithAds> getAdscreenNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 	
 	@Select("SELECT  *  FROM 	t_lighting right JOIN t_envir_devices ON t_envir_devices.device_id = t_lighting.SENSORID "
 			+"${ew.customSqlSegment}"
-			+"and LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
+			+" and LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithSensor> getSensorNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 	
 	@Select("SELECT  *  FROM 	t_lighting right JOIN alarm_box ON alarm_box.id = t_lighting.ALARMBOXID "
 			+"${ew.customSqlSegment}"
-			+"and LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
+			+" and LIGHTINGID is NULL and  deleted = '0' OR LIGHTINGID='' and isdeleted = '0'")
 	List<LightingWithAlarm> getAlarmNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 	
 	@Select("SELECT  *  FROM  t_lighting l  right JOIN  t_bright  n ON  n.NODE_ID = l.LAMPSID  "
 			+"${ew.customSqlSegment}"
-			+"and l.LIGHTINGID is NULL  and  n.isdeleted='0'  OR  l.LIGHTINGID='' and l.isdeleted = '0'")
+			+" and l.LIGHTINGID is NULL  and  n.isdeleted='0'  OR  l.LIGHTINGID='' and l.isdeleted = '0'")
 	List<LightingWithLamps> getBrightNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 	
 	@Select("SELECT	*  FROM 	t_lighting RIGHT JOIN camera ON CAMERAID =id "
 			+"${ew.customSqlSegment}"
-			+"and LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = '' and isdeleted = '0'")
+			+" and LIGHTINGID IS NULL AND deleted = '0' OR LIGHTINGID = '' and isdeleted = '0'")
 	List<LightingWithCamera> getCameraNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 
 	@Select("select * from t_lighting  ${ew.customSqlSegment} limit #{current}, #{pageSize}")
