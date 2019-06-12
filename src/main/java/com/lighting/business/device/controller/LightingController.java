@@ -609,24 +609,24 @@ public class LightingController extends  BaseController{
 		return ResultWrapper.success().message("灯杆解绑失败");
 	}
 	@GetMapping("/adscreenNotBind")
-	public  IPage<LightingWithAds>  adscreenNotBind(Page<LightingWithAds> page) {
-		return lightingService.getAdscreenNotBind(page, getUser());
+	public  IPage<LightingWithAds>  adscreenNotBind(Page<LightingWithAds> page,Lighting lighting) {
+		return lightingService.getAdscreenNotBind(page, getUser(),lighting);
 	}
 	@GetMapping("/cameraNotBind")
-	public  IPage<LightingWithCamera>  cameraNotBind(Page<LightingWithCamera> page) {
-		return lightingService.getCameraNotBind(page, getUser());
+	public  IPage<LightingWithCamera>  cameraNotBind(Page<LightingWithCamera> page,Lighting lighting) {
+		return lightingService.getCameraNotBind(page, getUser(),lighting);
 	}
 	@GetMapping("/alarmNotBind")
-	public  IPage<LightingWithAlarm>  alarmNotBind(Page<LightingWithAlarm> page) {
-		return lightingService.getAlarmNotBind(page,getUser());
+	public  IPage<LightingWithAlarm>  alarmNotBind(Page<LightingWithAlarm> page,Lighting lighting) {
+		return lightingService.getAlarmNotBind(page,getUser(),lighting);
 	}
 	@GetMapping("/sensorNotBind")
-	public  IPage<LightingWithSensor>  sensorNotBind(Page<LightingWithSensor> page) {
-		return lightingService.getSensorNotBind(page, getUser());
+	public  IPage<LightingWithSensor>  sensorNotBind(Page<LightingWithSensor> page,Lighting lighting) {
+		return lightingService.getSensorNotBind(page, getUser(),lighting);
 	}
 	@GetMapping("/brightNotBind")
-	public  IPage<LightingWithLamps>  brightNotBind(Page<LightingWithLamps> page) {
-		return lightingService.getBrightNotBind(page, getUser());
+	public  IPage<LightingWithLamps>  brightNotBind(Page<LightingWithLamps> page,Lighting lighting) {
+		return lightingService.getBrightNotBind(page, getUser(),lighting);
 	}
 	
 	@GetMapping("/getLightingByIds")

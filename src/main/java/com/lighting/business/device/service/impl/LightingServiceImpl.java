@@ -6,8 +6,6 @@ import com.lighting.business.device.service.ILightingService;
 
 import landsky.basic.common.ResultWrapper;
 import landsky.basic.entity.UserHolder;
-
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -368,8 +366,11 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public IPage<LightingWithLamps> getBrightNotBind(Page<LightingWithLamps> page, UserHolder user) {
+	public IPage<LightingWithLamps> getBrightNotBind(Page<LightingWithLamps> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
+        QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+        wrapper.eq("n.projectid",lighting.getProjectid());
+        wrapper.eq("n.areaid",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -378,12 +379,15 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		if (areaIds.isEmpty()) {
 			return null;
 		}
-		return page.setRecords(baseMapper.getBrightNotBind());
+		return page.setRecords(baseMapper.getBrightNotBind(wrapper));
 	}
 
 	@Override
-	public IPage<LightingWithAds> getAdscreenNotBind(Page<LightingWithAds> page, UserHolder user) {
+	public IPage<LightingWithAds> getAdscreenNotBind(Page<LightingWithAds> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
+        QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+        wrapper.eq("t_ad_screen_device.projectid",lighting.getProjectid());
+        wrapper.eq("t_ad_screen_device.areaid",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -392,12 +396,15 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		if (areaIds.isEmpty()) {
 			return null;
 		}
-		return page.setRecords(baseMapper.getAdscreenNotBind());
+		return page.setRecords(baseMapper.getAdscreenNotBind(wrapper));
 	}
 
 	@Override
-	public IPage<LightingWithCamera> getCameraNotBind(Page<LightingWithCamera> page, UserHolder user) {
+	public IPage<LightingWithCamera> getCameraNotBind(Page<LightingWithCamera> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
+        QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+        wrapper.eq("camera.project_id",lighting.getProjectid());
+        wrapper.eq("camera.area_id",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -406,12 +413,15 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		if (areaIds.isEmpty()) {
 			return null;
 		}
-		return page.setRecords(baseMapper.getCameraNotBind());
+		return page.setRecords(baseMapper.getCameraNotBind(wrapper));
 	}
 
 	@Override
-	public IPage<LightingWithAlarm> getAlarmNotBind(Page<LightingWithAlarm> page, UserHolder user) {
+	public IPage<LightingWithAlarm> getAlarmNotBind(Page<LightingWithAlarm> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
+        QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+        wrapper.eq("alarm_box.project_id",lighting.getProjectid());
+        wrapper.eq("alarm_box.area_id",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -420,12 +430,15 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		if (areaIds.isEmpty()) {
 			return null;
 		}
-		return page.setRecords(baseMapper.getAlarmNotBind());
+		return page.setRecords(baseMapper.getAlarmNotBind(wrapper));
 	}
 
 	@Override
-	public IPage<LightingWithSensor> getSensorNotBind(Page<LightingWithSensor> page, UserHolder user) {
+	public IPage<LightingWithSensor> getSensorNotBind(Page<LightingWithSensor> page, UserHolder user,Lighting lighting) {
 		// TODO Auto-generated method stub
+        QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+        wrapper.eq("t_envir_devices.project_id",lighting.getProjectid());
+        wrapper.eq("t_envir_devices.area_id",lighting.getAreaid());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
@@ -434,7 +447,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		if (areaIds.isEmpty()) {
 			return null;
 		}
-		return page.setRecords(baseMapper.getSensorNotBind());
+		return page.setRecords(baseMapper.getSensorNotBind(wrapper));
 	}
 
 	@Override

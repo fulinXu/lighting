@@ -49,11 +49,11 @@ public interface ILightingService extends IService<Lighting> {
 	boolean brightLoseBind(QueryWrapper<Object> wrapper,String brightid);
 	boolean lightingLoseSensor(QueryWrapper<Object> wrapper,String bindid);
 	boolean sensorLoseBind(QueryWrapper<Object> wrapper,String brightid);
-	IPage<LightingWithLamps> getBrightNotBind(Page<LightingWithLamps> page,UserHolder user);
-	IPage<LightingWithAds> getAdscreenNotBind(Page<LightingWithAds> page,UserHolder user);
-	IPage<LightingWithCamera> getCameraNotBind(Page<LightingWithCamera> page,UserHolder user);
-	IPage<LightingWithAlarm> getAlarmNotBind(Page<LightingWithAlarm> page,UserHolder user);
-	IPage<LightingWithSensor> getSensorNotBind(Page<LightingWithSensor> page,UserHolder user);
+	IPage<LightingWithLamps> getBrightNotBind(Page<LightingWithLamps> page,UserHolder user,Lighting lighting);
+	IPage<LightingWithAds> getAdscreenNotBind(Page<LightingWithAds> page,UserHolder user,Lighting lighting);
+	IPage<LightingWithCamera> getCameraNotBind(Page<LightingWithCamera> page,UserHolder user,Lighting lighting);
+	IPage<LightingWithAlarm> getAlarmNotBind(Page<LightingWithAlarm> page,UserHolder user,Lighting lighting);
+	IPage<LightingWithSensor> getSensorNotBind(Page<LightingWithSensor> page,UserHolder user,Lighting lighting);
 	List<Map<String,Object>> getLightingByIds(List<String> lightingIds,Lighting lighting);
 	Map<String,Object> getLighting(Lighting lighting,QueryWrapper<Lighting> wrapper);
 	ResultWrapper getCountByAreaId(QueryWrapper<Lighting> wrapper,UserHolder user);
