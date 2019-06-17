@@ -433,17 +433,16 @@ public class LightingController extends  BaseController{
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		if (projectId!=null&&!"".equals(projectId)){
 			if (areaId!=null&&!"".equals(areaId)){
-				wrapper.eq("projectid",projectId);
-				wrapper.eq("areaid",areaId);
-				return  !lightingService.isBinding(wrapper);
+
+				return  lightingService.isEqArea(deviceIds,projectId,areaId);
 			}
 			return  true;
 		}
-		wrapper.in("lampsid",Arrays.asList(deviceIds));
-		wrapper.in("adscreenid",Arrays.asList(deviceIds));
-		wrapper.in("cameraid",Arrays.asList(deviceIds));
-		wrapper.in("alarmboxid",Arrays.asList(deviceIds));
-		wrapper.in("sensorid",Arrays.asList(deviceIds));
+		wrapper.or().in("lampsid",Arrays.asList(deviceIds));
+		wrapper.or().in("adscreenid",Arrays.asList(deviceIds));
+		wrapper.or().in("cameraid",Arrays.asList(deviceIds));
+		wrapper.or().in("alarmboxid",Arrays.asList(deviceIds));
+		wrapper.or().in("sensorid",Arrays.asList(deviceIds));
 		return  lightingService.isBinding(wrapper);
 	}
 	

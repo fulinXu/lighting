@@ -11,10 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import landsky.basic.feign.envir.EnvirFeignService;
 import landsky.basic.feign.project.ProjectFeignService;
@@ -500,11 +497,11 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
-			return null;
+			return ResultWrapper.success().object(Collections.emptyList());
 		}
 		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (areaIds.isEmpty()) {
-			return null;
+			return ResultWrapper.success().object(Collections.emptyList());
 		}
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		return ResultWrapper.success().object(baseMapper.selectList(wrapper.in("projectid",projectIds).in("areaid",areaIds).eq("isdeleted",0)));
@@ -517,6 +514,11 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		lighting.setIsdeleted(1);
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
 		wrapper.in("lightingid",lightingList);
+        lighting.setLampsid(null);
+        lighting.setAdscreenid(null);
+        lighting.setAlarmboxid(null);
+        lighting.setCameraid(null);
+        lighting.setSensorid(null);
 		return ResultWrapper.success().object(baseMapper.update(lighting,wrapper));
 	}
 
@@ -628,6 +630,28 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Boolean isEqArea(String[] deviceIds,String projectid, String areaid) {
+        QueryWrapper<Lighting> selectWrapper = new QueryWrapper<>();
+        selectWrapper.or().in("lampsid", Arrays.asList(deviceIds));
+        selectWrapper.or().in("adscreenid",Arrays.asList(deviceIds));
+        selectWrapper.or().in("cameraid",Arrays.asList(deviceIds));
+        selectWrapper.or().in("alarmboxid",Arrays.asList(deviceIds));
+        selectWrapper.or().in("sensorid",Arrays.asList(deviceIds));
+        List<Lighting> lightings = baseMapper.selectList(selectWrapper);
+        if (lightings.size()>0){
+            for(Lighting lighting: lightings){
+                if(projectid.equals(lighting.getProjectid())){
+                    if (areaid.equals(lighting.getAreaid())){
+                        return  false;
+                    }
+                    return  true;
+                }
+            }
+        }
+        return true;
     }
 
 
