@@ -312,6 +312,21 @@ public class LightingController extends  BaseController{
 		return lightingService.getWaterListByLighting(page, wrapper, getUser());
 	}
 
+
+	@GetMapping("/getCoordinateByDevice")
+	public  Map<String,Double> getCoordinateByDevice(String deviceId,Integer deviceType){
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		if (deviceType==8){
+			wrapper.eq("sensorid",deviceId);
+		}
+		if (deviceType==4){
+			wrapper.eq("alarmboxid",deviceId);
+		}
+		wrapper.eq("isdeleted",0);
+		return  lightingService.getCoordinateByDevice(wrapper);
+	}
+
+
 	@ApiOperation("根据id获取灯杆的信息")
 	@ApiImplicitParams({ 
 		@ApiImplicitParam(dataType = "String",name = "lightingid", value = "灯杆Id", paramType = "query", required = true)

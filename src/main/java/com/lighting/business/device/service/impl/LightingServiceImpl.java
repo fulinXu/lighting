@@ -654,5 +654,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
         return true;
     }
 
+    @Override
+    public Map<String,Double> getCoordinateByDevice(QueryWrapper<Lighting> wrapper) {
+	    Lighting lighting = baseMapper.selectOne(wrapper);
+	    Map<String,Double> map = new HashMap<>();
+	    map.put("longitude",lighting.getLongitude());
+	    map.put("latitude",lighting.getLatitude());
+        return map;
+    }
+
 
 }
