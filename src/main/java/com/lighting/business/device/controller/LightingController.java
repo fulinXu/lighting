@@ -313,6 +313,9 @@ public class LightingController extends  BaseController{
 	}
 
 
+	/**
+	 * 根据设备id获取故障坐标
+	 */
 	@GetMapping("/getCoordinateByDevice")
 	public  Map<String,Double> getCoordinateByDevice(String deviceId,Integer deviceType){
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();

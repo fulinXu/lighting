@@ -657,6 +657,9 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
     @Override
     public Map<String,Double> getCoordinateByDevice(QueryWrapper<Lighting> wrapper) {
 	    Lighting lighting = baseMapper.selectOne(wrapper);
+	    if (lighting==null){
+	    	return  null;
+		}
 	    Map<String,Double> map = new HashMap<>();
 	    map.put("longitude",lighting.getLongitude());
 	    map.put("latitude",lighting.getLatitude());
