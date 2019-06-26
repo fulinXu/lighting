@@ -72,8 +72,28 @@ public class LightingWithOthers extends Lighting{
 	private String verifyCode;
     @TableField("alarmState")
     private Integer alarmState;
+    @TableField("cameraUuid")
+	private String cameraUuid;
+    @TableField("alarmboxUuid")
+    private String alarmboxUuid;
 
-    public String getVerifyCode() {
+	public String getCameraUuid() {
+		return cameraUuid;
+	}
+
+	public void setCameraUuid(String cameraUuid) {
+		this.cameraUuid = cameraUuid;
+	}
+
+	public String getAlarmboxUuid() {
+		return alarmboxUuid;
+	}
+
+	public void setAlarmboxUuid(String alarmboxUuid) {
+		this.alarmboxUuid = alarmboxUuid;
+	}
+
+	public String getVerifyCode() {
         return verifyCode;
     }
 

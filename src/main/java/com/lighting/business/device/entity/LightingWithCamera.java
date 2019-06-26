@@ -86,7 +86,9 @@ public class LightingWithCamera extends Lighting{
 	private Integer state;
 	@TableField("id")
 	private String  id;
-	
+
+	@TableField("camera_uuid")
+	private String cameraUuid;
 	/**
 	 * @Fields remark:备注
 	 */
@@ -98,6 +100,15 @@ public class LightingWithCamera extends Lighting{
 	private Date updateTime;
 	@TableField("deleted")
 	private Boolean deleted;
+
+	public String getCameraUuid() {
+		return cameraUuid;
+	}
+
+	public void setCameraUuid(String cameraUuid) {
+		this.cameraUuid = cameraUuid;
+	}
+
 	public String getProjectId() {
 		return projectId;
 	}

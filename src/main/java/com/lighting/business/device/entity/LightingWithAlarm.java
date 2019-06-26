@@ -55,6 +55,8 @@ public class LightingWithAlarm extends Lighting{
 	@TableField("model_number")
 	private String modelNumber;
 
+	@TableField("camera_uuid")
+	private String cameraUuid;
 	/**
 	 * @Fields memory:内存容量
 	 */
@@ -85,6 +87,15 @@ public class LightingWithAlarm extends Lighting{
 	private Date updateTime;
 	@TableField("deleted")
 	private Boolean deleted;
+
+	public String getCameraUuid() {
+		return cameraUuid;
+	}
+
+	public void setCameraUuid(String cameraUuid) {
+		this.cameraUuid = cameraUuid;
+	}
+
 	public String getProjectId() {
 		return projectId;
 	}
