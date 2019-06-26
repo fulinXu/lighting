@@ -31,7 +31,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	 */
 	@Select("select l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
-			+ "left join (select * from camera where deleted = 0) c on l.CAMERAID=c.id "
+			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
 			+ "left join (select * from t_envir_devices where deleted = 0) d on l.SENSORID=d.device_id " 
 			+ "left join  (select * from t_bright where isdeleted = 0)  n on l.LAMPSID=n.node_id "
@@ -40,7 +40,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	
 	@Select("select l.*,n.voltage,c.state As cameraState,b.state As alarmState,n.verify_code As verifyCode,n.current_level As currentLevel,n.powerfactor,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
-			+ "left join (select * from camera where deleted = 0) c on l.CAMERAID=c.id "
+			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
 			+ "left join (select h.atmospheric_pressure,h.temperature_soil,h.temperature,h.humidity_soil,g.`status`,h.humidity,h.pm25,h.pm10,h.co2,h.density_gas,h.illuminate,h.create_time,h.noise,g.device_name,g.device_id from (select * from t_envir_devices where deleted = 0) g LEFT JOIN  (select * from t_evir_weather_only where deleted = 0) h on h.device_id = g.device_id) d ON l.SENSORID = d.device_id " 
 			+ "left join (select * from t_bright where isdeleted = 0) n on l.LAMPSID=n.node_id "

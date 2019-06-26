@@ -107,6 +107,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		}
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
+		wrapper.ne("n.state",3);
 		return page.setRecords(baseMapper.getCameraListByLighting(page, wrapper));
 	}
 	
@@ -402,6 +403,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
         QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
         wrapper.eq("camera.project_id",lighting.getProjectid());
         wrapper.eq("camera.area_id",lighting.getAreaid());
+        wrapper.ne("camera.state",3);
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return null;
