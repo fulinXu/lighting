@@ -342,7 +342,6 @@ public class LightingController extends  BaseController{
 			wrapper.eq("l.ADSCREENID",lighting.getAdscreenid());
 		}
 		if (lighting.getLampsid()!=null&&!lighting.getLampsid().equals("")) {
-			wrapper.eq("l.LAMPSID",lighting.getLampsid());
 		}
 		if (lighting.getCameraid()!=null&&!lighting.getCameraid().equals("")) {
 			wrapper.eq("l.CAMERAID",lighting.getCameraid());
