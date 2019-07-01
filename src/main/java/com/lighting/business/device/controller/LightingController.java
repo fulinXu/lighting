@@ -378,7 +378,7 @@ public class LightingController extends  BaseController{
 			return ResultWrapper.success(false).message("灯杆名称不能为空");
 		}
 		int count = lightingService.count(
-				Wrappers.<Lighting>query().lambda().eq(Lighting::getLightingname, lighting.getLightingname()));
+				Wrappers.<Lighting>query().lambda().eq(Lighting::getIsdeleted,0).eq(Lighting::getLightingname, lighting.getLightingname()));
 		if (count > 0) {
 			return ResultWrapper.success(false).message("灯杆名称已存在");
 		}

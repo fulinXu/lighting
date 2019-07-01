@@ -74,9 +74,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.areaid",areaIds);
 		wrapper.in("n.projectid", projectIds);
 		wrapper.in("n.isdeleted",0);
 		return page.setRecords(baseMapper.getLampsListByLighting(page, wrapper));
@@ -88,9 +93,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		return page.setRecords(baseMapper.getAdsListByLighting(page, wrapper));
@@ -102,9 +112,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		wrapper.ne("n.state",3);
@@ -117,9 +132,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		return page.setRecords(baseMapper.getAlarmListByLighting(page, wrapper));
@@ -131,9 +151,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		return page.setRecords(baseMapper.getSensorListByLighting(page, wrapper));
@@ -142,9 +167,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	@Override
 	public IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		List<Integer> typeList = new ArrayList<>();
 		typeList.add(1);
 		typeList.add(3);
@@ -157,9 +187,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	@Override
 	public IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		List<Integer> typeList = new ArrayList<>();
 		typeList.add(2);
 		typeList.add(3);
@@ -175,9 +210,14 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
 			return page;
 		}
+		if (areaIds.isEmpty()) {
+			return page;
+		}
+		wrapper.in("n.area_id",areaIds);
 		wrapper.in("n.project_id", projectIds);
 		wrapper.in("n.deleted",0);
 		return page.setRecords(baseMapper.getEvseListByLighting(page, wrapper));
