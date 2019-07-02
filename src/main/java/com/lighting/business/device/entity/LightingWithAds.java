@@ -103,8 +103,18 @@ public class LightingWithAds extends Lighting{
      */
 	@TableField("area_id")
     private String areaId;
-	
-	
+
+	/**
+	 * 灯杆经度
+	 */
+	@TableField("lightingLatitude")
+	private String lightingLatitude;
+
+	/**
+	 * 灯杆纬度
+	 */
+	@TableField("lightinglongitude")
+	private String lightinglongitude;
 	
     /**
      * 数据同步时间
@@ -117,6 +127,33 @@ public class LightingWithAds extends Lighting{
     private  Date updateTime;
 	@TableField("deleted")
     private  Boolean deleted;
+	@TableField("address")
+	private  String address;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getLightingLatitude() {
+		return lightingLatitude;
+	}
+
+	public void setLightingLatitude(String lightingLatitude) {
+		this.lightingLatitude = lightingLatitude;
+	}
+
+	public String getLightinglongitude() {
+		return lightinglongitude;
+	}
+
+	public void setLightinglongitude(String lightinglongitude) {
+		this.lightinglongitude = lightinglongitude;
+	}
+
 	public String getCardNumber() {
 		return cardNumber;
 	}

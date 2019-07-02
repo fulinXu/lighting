@@ -9,7 +9,53 @@ public class LightingWithEvse extends Lighting {
     private String DZMC;// 充电桩名称
     @TableField("status")
     private int status;// 状态 1在线 0不在线
+    @TableField("GZZT")
+    private String GZZT; //工作状态
+    /**
+     * 灯杆经度
+     */
+    @TableField("lightingLatitude")
+    private String lightingLatitude;
 
+    /**
+     * 灯杆纬度
+     */
+    @TableField("lightinglongitude")
+    private String lightinglongitude;
+
+    @TableField("address")
+    private  String address;
+
+    public String getGZZT() {
+        return GZZT;
+    }
+
+    public void setGZZT(String GZZT) {
+        this.GZZT = GZZT;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getLightingLatitude() {
+        return lightingLatitude;
+    }
+
+    public void setLightingLatitude(String lightingLatitude) {
+        this.lightingLatitude = lightingLatitude;
+    }
+
+    public String getLightinglongitude() {
+        return lightinglongitude;
+    }
+
+    public void setLightinglongitude(String lightinglongitude) {
+        this.lightinglongitude = lightinglongitude;
+    }
     public String getDZBH() {
         return DZBH;
     }

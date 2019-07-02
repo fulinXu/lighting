@@ -100,7 +100,43 @@ public class LightingWithCamera extends Lighting{
 	private Date updateTime;
 	@TableField("deleted")
 	private Boolean deleted;
+	/**
+	 * 灯杆经度
+	 */
+	@TableField("lightingLatitude")
+	private String lightingLatitude;
 
+	/**
+	 * 灯杆纬度
+	 */
+	@TableField("lightinglongitude")
+	private String lightinglongitude;
+
+	@TableField("address")
+	private  String address;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getLightingLatitude() {
+		return lightingLatitude;
+	}
+
+	public void setLightingLatitude(String lightingLatitude) {
+		this.lightingLatitude = lightingLatitude;
+	}
+
+	public String getLightinglongitude() {
+		return lightinglongitude;
+	}
+
+	public void setLightinglongitude(String lightinglongitude) {
+		this.lightinglongitude = lightinglongitude;
+	}
 	public String getCameraUuid() {
 		return cameraUuid;
 	}

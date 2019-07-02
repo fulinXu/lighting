@@ -29,41 +29,43 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	 * @param wrapper
 	 * @return
 	 */
-	@Select("select l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
+	@Select("select v.DZBH,v.status As evseStatus,v.DZMC,v.GZZT,l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
-			+ "left join (select * from t_envir_devices where deleted = 0) d on l.SENSORID=d.device_id " 
+			+ "left join (select * from t_envir_devices where deleted = 0) d on l.SENSORID=d.device_id "
 			+ "left join  (select * from t_bright where isdeleted = 0)  n on l.LAMPSID=n.node_id "
+	        + "left join (select m.DZBH,m.status,m.DZMC,k.GZZT from t_evse_device m,t_evse_device_status k where m.deleted = 0 and m.DZBH = k.DZBH) v on v.DZBH = l.EVSEID "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("select l.*,n.voltage,c.state As cameraState,c.camera_uuid As cameraUuid,b.camera_uuid As alarmboxUuid,b.state As alarmState,n.verify_code As verifyCode,n.current_level As currentLevel,n.powerfactor,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
+	@Select("select v.DZBH,v.status As evseStatus,v.DZMC,v.GZZT,l.*,n.voltage,c.state As cameraState,c.camera_uuid As cameraUuid,b.camera_uuid As alarmboxUuid,b.state As alarmState,n.verify_code As verifyCode,n.current_level As currentLevel,n.powerfactor,a.device_name,d.atmospheric_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  device_aliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,f.water from t_lighting l  "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
 			+ "left join (select h.atmospheric_pressure,h.temperature_soil,h.temperature,h.humidity_soil,g.`status`,h.humidity,h.pm25,h.pm10,h.co2,h.density_gas,h.illuminate,h.create_time,h.noise,g.device_name,g.device_id from (select * from t_envir_devices where deleted = 0) g LEFT JOIN  (select * from t_evir_weather_only where deleted = 0) h on h.device_id = g.device_id) d ON l.SENSORID = d.device_id " 
 			+ "left join (select * from t_bright where isdeleted = 0) n on l.LAMPSID=n.node_id "
 			+ "LEFT JOIN (select k.water,k.create_time,j.device_id from (select * from t_envir_hydrops_only where deleted = 0) k LEFT JOIN (select * from t_envir_devices where deleted = 0) j on k.device_id = j.device_id) f ON l.SENSORID = f.device_id  "
+			+ "left join (select m.DZBH,m.status,m.DZMC,k.GZZT from t_evse_device m,t_evse_device_status k where m.deleted = 0 and m.DZBH = k.DZBH) v on v.DZBH = l.EVSEID "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithOthers> getLightingListById(@Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_bright n ON n.NODE_ID = l.LAMPSID  "
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_bright n ON n.NODE_ID = l.LAMPSID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_ad_screen_device  n ON n.id = l.ADSCREENID  "
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_ad_screen_device  n ON n.id = l.ADSCREENID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN camera  n ON n.id = l.CAMERAID  "
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN camera  n ON n.id = l.CAMERAID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN alarm_box  n ON n.id = l.ALARMBOXID  "
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN alarm_box  n ON n.id = l.ALARMBOXID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, @Param("ew") Wrapper<Lighting> wrapper);
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN ("
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN ("
 			+ "SELECT  d.device_type,d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
 			+ " FROM t_envir_devices d"
 			+ " LEFT JOIN t_evir_weather_only w ON d.device_id = w.device_id "
@@ -72,7 +74,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			+ "${ew.customSqlSegment}")
 	List<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, @Param("ew") Wrapper<Lighting> wrapper);
 
-	@Select("SELECT  n.*, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_evse_device  n ON n.DZBH = l.EVSEID  "
+	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN t_evse_device  n ON n.DZBH = l.EVSEID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, @Param("ew") Wrapper<Lighting> wrapper);
 

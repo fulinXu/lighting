@@ -79,6 +79,43 @@ public class LightingWithLamps extends Lighting{
     private Integer csq;
 	@TableField("STATE")
     private Integer state;
+	/**
+	 * 灯杆经度
+	 */
+	@TableField("lightingLatitude")
+	private String lightingLatitude;
+
+	/**
+	 * 灯杆纬度
+	 */
+	@TableField("lightinglongitude")
+	private String lightinglongitude;
+
+	public String getLightingLatitude() {
+		return lightingLatitude;
+	}
+
+	@TableField("address")
+	private  String address;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public void setLightingLatitude(String lightingLatitude) {
+		this.lightingLatitude = lightingLatitude;
+	}
+
+	public String getLightinglongitude() {
+		return lightinglongitude;
+	}
+
+	public void setLightinglongitude(String lightinglongitude) {
+		this.lightinglongitude = lightinglongitude;
+	}
 	public String getNodeId() {
 		return nodeId;
 	}

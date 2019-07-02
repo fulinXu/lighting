@@ -76,6 +76,46 @@ public class LightingWithOthers extends Lighting{
 	private String cameraUuid;
     @TableField("alarmboxUuid")
     private String alarmboxUuid;
+	@TableField("DZBH")
+	private String DZBH;// 编号
+	@TableField("DZMC")
+	private String DZMC;// 充电桩名称
+	@TableField("evseStatus")
+	private int evseStatus;// 状态 1在线 0不在线
+	@TableField("GZZT")
+	private String GZZT; //工作状态
+
+	public String getDZBH() {
+		return DZBH;
+	}
+
+	public void setDZBH(String DZBH) {
+		this.DZBH = DZBH;
+	}
+
+	public String getDZMC() {
+		return DZMC;
+	}
+
+	public void setDZMC(String DZMC) {
+		this.DZMC = DZMC;
+	}
+
+	public int getEvseStatus() {
+		return evseStatus;
+	}
+
+	public void setEvseStatus(int evseStatus) {
+		this.evseStatus = evseStatus;
+	}
+
+	public String getGZZT() {
+		return GZZT;
+	}
+
+	public void setGZZT(String GZZT) {
+		this.GZZT = GZZT;
+	}
 
 	public String getCameraUuid() {
 		return cameraUuid;

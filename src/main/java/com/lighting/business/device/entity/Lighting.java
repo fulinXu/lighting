@@ -107,11 +107,23 @@ public class Lighting  implements Serializable {
     
     @TableField("ISDELETED")
     private Integer isdeleted;
+
+    @TableField("address")
+    private String address;
     /**
      * 纬度
      */
     @TableField("LATITUDE")
     private Double latitude;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Integer getIsdeleted() {
 		return isdeleted;
 	}
