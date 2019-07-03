@@ -84,8 +84,28 @@ public class LightingWithOthers extends Lighting{
 	private int evseStatus;// 状态 1在线 0不在线
 	@TableField("GZZT")
 	private String GZZT; //工作状态
+    @TableField("startTime")
+    private String startTime;
+    @TableField("endTime")
+    private String endTime;
 
-	public String getDZBH() {
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getDZBH() {
 		return DZBH;
 	}
 

@@ -468,49 +468,11 @@ public class LightingController extends  BaseController{
 	})
 	@LogProcessor
 	@PostMapping("deviceBinding")
-//	@Transactional
 	public  ResultWrapper deviceBinding(Lighting lighting) {
 		QueryWrapper<Object> wrapper = Wrappers.<Object>query();
 		if (lighting.getLightingid()==null||lighting.getLightingid().equals("")) {
 			return ResultWrapper.success(false).message("灯杆id不能为空");
 		}
-//		Boolean bool = lightingService.updateById(lighting);
-//		Boolean devicebool=false;
-//		if (!bool) {
-//			throw new RuntimeException();
-//		}
-//		else {
-//			if (lighting.getAdscreenid()!=null&&!lighting.getAdscreenid().equals("")) {
-//				devicebool=lightingService.adscreenBind(lighting.getAdscreenid(), wrapper,lighting.getLightingid());
-//				if (!devicebool) {
-//					throw new RuntimeException();
-//				}
-//			}
-//			if (lighting.getAlarmboxid()!=null&&!"".equals(lighting.getAlarmboxid())) {
-//				devicebool=lightingService.alarmboxBind(lighting.getAlarmboxid(), wrapper,lighting.getLightingid());
-//				if (!devicebool) {
-//					throw new RuntimeException();
-//				}
-//			}
-//			if (lighting.getCameraid()!=null&&!lighting.getCameraid().equals("")) {
-//				devicebool=lightingService.cameraBind(lighting.getCameraid(), wrapper,lighting.getLightingid());
-//				if (!devicebool) {
-//					throw new RuntimeException();
-//				}
-//			}
-//			if (lighting.getLampsid()!=null&&!lighting.getLampsid().equals("")) {
-//				devicebool=lightingService.brightBind(lighting.getLampsid(), wrapper,lighting.getLightingid());
-//				if (!devicebool) {
-//					throw new RuntimeException();
-//				}
-//			}
-//			if (lighting.getSensorid()!=null&&!lighting.getSensorid().equals("")) {
-//				devicebool=lightingService.envirBind(lighting.getSensorid(), wrapper,lighting.getLightingid());
-//				if (!devicebool) {
-//					throw new RuntimeException();
-//				}
-//			}
-//		}
 		if (lightingService.updateById(lighting)) {
 			return ResultWrapper.success(lightingService.updateById(lighting)).message("灯杆绑定成功");
 		}

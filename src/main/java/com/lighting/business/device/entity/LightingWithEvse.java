@@ -16,7 +16,10 @@ public class LightingWithEvse extends Lighting {
      */
     @TableField("lightingLatitude")
     private String lightingLatitude;
-
+    @TableField("startTime")
+    private String startTime;
+    @TableField("endTime")
+    private String endTime;
     /**
      * 灯杆纬度
      */
@@ -32,6 +35,22 @@ public class LightingWithEvse extends Lighting {
 
     public void setGZZT(String GZZT) {
         this.GZZT = GZZT;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getAddress() {

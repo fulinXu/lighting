@@ -43,6 +43,8 @@ public class LightingWithSensor extends Lighting{
 	private Date waterCreateTime;
 	@TableField("water")
 	private Double water;
+	@TableField("deviceType")
+	private Integer deviceType;
 	/**
 	 * 灯杆经度
 	 */
@@ -62,7 +64,15 @@ public class LightingWithSensor extends Lighting{
 	@TableField("address")
 	private  String address;
 
-	public String getAddress() {
+    public Integer getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(Integer deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getAddress() {
 		return address;
 	}
 
