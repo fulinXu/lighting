@@ -76,6 +76,10 @@ public class LightingWithOthers extends Lighting{
 	private String cameraUuid;
     @TableField("alarmboxUuid")
     private String alarmboxUuid;
+    @TableField("screenOnoff")
+    private Integer screenOnoff;
+    @TableField("runningState")
+    private Integer runningState;
 	@TableField("DZBH")
 	private String DZBH;// 编号
 	@TableField("DZMC")
@@ -88,6 +92,22 @@ public class LightingWithOthers extends Lighting{
     private String startTime;
     @TableField("endTime")
     private String endTime;
+
+    public Integer getScreenOnoff() {
+        return screenOnoff;
+    }
+
+    public void setScreenOnoff(Integer screenOnoff) {
+        this.screenOnoff = screenOnoff;
+    }
+
+    public Integer getRunningState() {
+        return runningState;
+    }
+
+    public void setRunningState(Integer runningState) {
+        this.runningState = runningState;
+    }
 
     public String getStartTime() {
         return startTime;

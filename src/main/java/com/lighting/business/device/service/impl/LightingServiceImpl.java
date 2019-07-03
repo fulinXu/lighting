@@ -546,7 +546,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 			return ResultWrapper.success().object(Collections.emptyList());
 		}
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		return ResultWrapper.success().object(baseMapper.selectList(wrapper.in("projectid",projectIds).in("areaid",areaIds).eq("isdeleted",0)));
+		return ResultWrapper.success().object(baseMapper.selectList(wrapper.in("projectid",projectIds).in("areaid",areaIds)));
 	}
 
 	@Override
