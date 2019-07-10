@@ -7,6 +7,7 @@ import java.util.*;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.lighting.business.device.entity.*;
+import landsky.basic.cache.project.ProjectAreaCache;
 import landsky.basic.feign.envir.EnvirFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -438,6 +439,14 @@ public class LightingController extends  BaseController{
 	}
 
 	//是否包含已绑定的设备
+
+	/**
+	 * 绑定了不让修改返回true
+	 * @param deviceIds
+	 * @param projectId
+	 * @param areaId
+	 * @return
+	 */
 	@GetMapping("/isBinding")
 	public  Boolean isBinding(String[] deviceIds,String projectId,String areaId){
 		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();

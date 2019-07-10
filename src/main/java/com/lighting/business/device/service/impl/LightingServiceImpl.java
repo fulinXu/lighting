@@ -1,5 +1,6 @@
 package com.lighting.business.device.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.lighting.business.device.entity.*;
 import com.lighting.business.device.mapper.LightingMapper;
 import com.lighting.business.device.service.ILightingService;
@@ -554,13 +555,13 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 		// TODO Auto-generated method stub
 		Lighting lighting = new Lighting();
 		lighting.setIsdeleted(1);
-		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
-		wrapper.in("lightingid",lightingList);
-        lighting.setLampsid(null);
-        lighting.setAdscreenid(null);
-        lighting.setAlarmboxid(null);
-        lighting.setCameraid(null);
-        lighting.setSensorid(null);
+		LambdaUpdateWrapper<Lighting> wrapper = new LambdaUpdateWrapper<>();
+		wrapper.in(Lighting::getLightingid,lightingList);
+		wrapper.set(Lighting::getLampsid,null);
+		wrapper.set(Lighting::getAdscreenid,null);
+		wrapper.set(Lighting::getAlarmboxid,null);
+		wrapper.set(Lighting::getCameraid,null);
+		wrapper.set(Lighting::getSensorid,null);
 		return ResultWrapper.success().object(baseMapper.update(lighting,wrapper));
 	}
 
@@ -687,13 +688,13 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
             for(Lighting lighting: lightings){
                 if(projectid.equals(lighting.getProjectid())){
                     if (areaid.equals(lighting.getAreaid())){
-                        return  false;
+                        return  true;
                     }
-                    return  true;
+                    return  false;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override

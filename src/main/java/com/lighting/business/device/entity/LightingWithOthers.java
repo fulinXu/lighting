@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import landsky.basic.cache.project.ProjectAreaCacheable;
 
-public class LightingWithOthers extends Lighting{
+public class LightingWithOthers extends Lighting implements ProjectAreaCacheable {
 	@TableField("alias")
     private String alias;
 	@TableField("adscreenName")
@@ -92,6 +93,12 @@ public class LightingWithOthers extends Lighting{
     private String startTime;
     @TableField("endTime")
     private String endTime;
+
+    @TableField(exist = false)
+    private String projectName;
+
+    @TableField(exist = false)
+    private String areaName;
 
     public Integer getScreenOnoff() {
         return screenOnoff;
@@ -381,5 +388,32 @@ public class LightingWithOthers extends Lighting{
 	public void setCardNumber(String cardNumber) {
 		this.cardNumber = cardNumber;
 	}
-	
+
+	@Override
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	@Override
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
+
+	@Override
+	public String getProjectId() {
+		return getProjectid();
+	}
+
+	@Override
+	public String getAreaId() {
+		return getAreaid();
+	}
 }

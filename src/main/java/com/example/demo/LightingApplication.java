@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.github.wangchenning.redis.annotation.EnableRedisWcn;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -14,7 +15,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //服务间调用方法的注解
 @EnableFeignClients({LandskyBasic.PACKAGE,"com.lighting.business.*"})
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.lighting.*","landsky.basic"}) 
+@ComponentScan(basePackages = {"com.lighting.*","landsky.basic"})
+@EnableRedisWcn
 public class LightingApplication {
 
 	public static void main(String[] args) {
