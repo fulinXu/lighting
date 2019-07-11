@@ -653,8 +653,8 @@ public class LightingController extends  BaseController{
 	}
 	
 	@GetMapping("/getLightingAllList")
-	public ResultWrapper getLightingAllList() {
-		return lightingService.getLightingListAll(UserHolder.getUser());
+	public ResultWrapper getLightingAllList(String projectId,String areaId) {
+		return lightingService.getLightingListAll(UserHolder.getUser(),projectId,areaId);
 	}
 	
 	//根据时间段获取区域下灯杆总能耗
