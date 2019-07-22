@@ -7,7 +7,6 @@ import java.util.*;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.lighting.business.device.entity.*;
-import landsky.basic.cache.project.ProjectAreaCache;
 import landsky.basic.feign.envir.EnvirFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,10 +114,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({ 
 	})
 	@GetMapping("/getLampsListByLighting")
-	public  IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, LightingWithLamps lighting){
+		QueryWrapper<LightingWithLamps> wrapper = Wrappers.<LightingWithLamps>query();
+        if (lighting.getAlias()!=null&&!"".equals(lighting.getAlias())) {
+            wrapper.like("n.alias",lighting.getAlias());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.projectid",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.areaid",lighting.getAreaid());
 		}
 		return lightingService.getLampsListByLighting(page, wrapper,getUser());
 	}
@@ -127,10 +135,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({ 
 	})
 	@GetMapping("/getAdsListByLighting")
-	public  IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, LightingWithAds lighting){
+		QueryWrapper<LightingWithAds> wrapper = Wrappers.<LightingWithAds>query();
+        if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+            wrapper.like("n.device_name",lighting.getDeviceName());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getAdsListByLighting(page, wrapper, getUser());
 	}
@@ -139,10 +156,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({ 
 	})
 	@GetMapping("/getCameraListByLighting")
-	public  IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, LightingWithCamera lighting){
+		QueryWrapper<LightingWithCamera> wrapper = Wrappers.<LightingWithCamera>query();
+        if (lighting.getDeviceAlias()!=null&&!"".equals(lighting.getDeviceAlias())) {
+            wrapper.like("n.device_alias",lighting.getDeviceAlias());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getCameraListByLighting(page, wrapper, getUser());
 	}
@@ -151,10 +177,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({ 
 	})
 	@GetMapping("/getAlarmListByLighting")
-	public  IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, LightingWithAlarm lighting){
+		QueryWrapper<LightingWithAlarm> wrapper = Wrappers.<LightingWithAlarm>query();
+        if (lighting.getDeviceAlias()!=null&&!"".equals(lighting.getDeviceAlias())) {
+            wrapper.like("n.device_alias",lighting.getDeviceAlias());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getAlarmListByLighting(page, wrapper, getUser());
 }
@@ -164,10 +199,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({
 	})
 	@GetMapping("/getSensorListByLighting")
-	public  IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, LightingWithSensor lighting){
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
+        if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+            wrapper.like("n.deviceName",lighting.getDeviceName());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
 	}
@@ -176,10 +220,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({
 	})
 	@GetMapping("/getEvseListByLighting")
-	public  IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, LightingWithEvse lighting){
+		QueryWrapper<LightingWithEvse> wrapper = Wrappers.<LightingWithEvse>query();
+        if (lighting.getDZMC() != null && !"".equals(lighting.getDZMC())) {
+            wrapper.like("n.DZMC", lighting.getDZMC());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getEvseListByLighting(page, wrapper, getUser());
 	}
@@ -188,10 +241,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({
 	})
 	@GetMapping("/getWeatherListByLighting")
-	public  IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, LightingWithSensor lighting){
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
+        if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+            wrapper.like("n.deviceName",lighting.getDeviceName());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getWeatherListByLighting(page, wrapper, getUser());
 	}
@@ -200,10 +262,19 @@ public class LightingController extends  BaseController{
 	@ApiImplicitParams({
 	})
 	@GetMapping("/getWaterListByLighting")
-	public  IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, Lighting lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+	public  IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, LightingWithSensor lighting){
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
+        if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
+            wrapper.like("n.deviceName",lighting.getDeviceName());
+        }
 		if (lighting.getLightingid()!=null&&!"".equals(lighting.getLightingid())) {
 			wrapper.eq("l.lightingid",lighting.getLightingid());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getWaterListByLighting(page, wrapper, getUser());
 	}
@@ -213,9 +284,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getLampsListByLightingLike")
 	public  IPage<LightingWithLamps> getLampsListByLightingLike(Page<LightingWithLamps> page, LightingWithLamps lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithLamps> wrapper = Wrappers.<LightingWithLamps>query();
 		if (lighting.getAlias()!=null&&!"".equals(lighting.getAlias())) {
 			wrapper.like("n.alias",lighting.getAlias());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.projectid",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.areaid",lighting.getAreaid());
 		}
 		return lightingService.getLampsListByLighting(page, wrapper,getUser());
 	}
@@ -225,9 +302,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getAdsListByLightingLike")
 	public  IPage<LightingWithAds> getAdsListByLightingLike(Page<LightingWithAds> page, LightingWithAds lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithAds> wrapper = Wrappers.<LightingWithAds>query();
 		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
 			wrapper.like("n.device_name",lighting.getDeviceName());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getAdsListByLighting(page, wrapper, getUser());
 	}
@@ -237,9 +320,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getCameraListByLightingLike")
 	public  IPage<LightingWithCamera> getCameraListByLightingLike(Page<LightingWithCamera> page, LightingWithCamera lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithCamera> wrapper = Wrappers.<LightingWithCamera>query();
 		if (lighting.getDeviceAlias()!=null&&!"".equals(lighting.getDeviceAlias())) {
 			wrapper.like("n.device_alias",lighting.getDeviceAlias());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getCameraListByLighting(page, wrapper, getUser());
 	}
@@ -249,9 +338,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getAlarmListByLightingLike")
 	public  IPage<LightingWithAlarm> getAlarmListByLightingLike(Page<LightingWithAlarm> page, LightingWithAlarm lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithAlarm> wrapper = Wrappers.<LightingWithAlarm>query();
 		if (lighting.getDeviceAlias()!=null&&!"".equals(lighting.getDeviceAlias())) {
 			wrapper.like("n.device_alias",lighting.getDeviceAlias());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getAlarmListByLighting(page, wrapper, getUser());
 }
@@ -262,9 +357,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getSensorListByLightingLike")
 	public  IPage<LightingWithSensor> getSensorListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
 		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
 			wrapper.like("n.deviceName",lighting.getDeviceName());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getSensorListByLighting(page, wrapper, getUser());
 	}
@@ -275,9 +376,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getEvseListByLightingLike")
 	public  IPage<LightingWithEvse> getEvseListByLightingLike(Page<LightingWithEvse> page, LightingWithEvse lighting) {
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithEvse> wrapper = Wrappers.<LightingWithEvse>query();
 		if (lighting.getDZMC() != null && !"".equals(lighting.getDZMC())) {
 			wrapper.like("n.DZMC", lighting.getDZMC());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getEvseListByLighting(page, wrapper, getUser());
 	}
@@ -287,9 +394,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getWeatherListByLightingLike")
 	public  IPage<LightingWithSensor> getWeatherListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
 		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
 			wrapper.like("n.deviceName",lighting.getDeviceName());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getWeatherListByLighting(page, wrapper, getUser());
 	}
@@ -299,9 +412,15 @@ public class LightingController extends  BaseController{
 	})
 	@GetMapping("/getWaterListByLightingLike")
 	public  IPage<LightingWithSensor> getWaterListByLightingLike(Page<LightingWithSensor> page, LightingWithSensor lighting){
-		QueryWrapper<Lighting> wrapper = Wrappers.<Lighting>query();
+		QueryWrapper<LightingWithSensor> wrapper = Wrappers.<LightingWithSensor>query();
 		if (lighting.getDeviceName()!=null&&!"".equals(lighting.getDeviceName())) {
 			wrapper.like("n.deviceName",lighting.getDeviceName());
+		}
+		if (lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())){
+			wrapper.eq("n.project_id",lighting.getProjectid());
+		}
+		if (lighting.getAreaid()!=null&&!"".equals(lighting.getAreaid())){
+			wrapper.eq("n.area_id",lighting.getAreaid());
 		}
 		return lightingService.getWaterListByLighting(page, wrapper, getUser());
 	}

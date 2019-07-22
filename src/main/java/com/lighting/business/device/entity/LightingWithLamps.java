@@ -3,8 +3,9 @@ package com.lighting.business.device.entity;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import landsky.basic.cache.project.ProjectAreaCacheable;
 
-public class LightingWithLamps extends Lighting{
+public class LightingWithLamps extends Lighting implements ProjectAreaCacheable {
 	@TableField("NODE_ID")
     private String nodeId;
 	@TableField("DEVICE_ID")
@@ -79,6 +80,8 @@ public class LightingWithLamps extends Lighting{
     private Integer csq;
 	@TableField("STATE")
     private Integer state;
+	@TableField("isfault")
+	private Integer isfault;
 	/**
 	 * 灯杆经度
 	 */
@@ -97,6 +100,12 @@ public class LightingWithLamps extends Lighting{
 
 	@TableField("address")
 	private  String address;
+
+	@TableField(exist = false)
+	private String projectName;
+
+	@TableField(exist = false)
+	private String areaName;
 
 	public String getAddress() {
 		return address;
@@ -338,5 +347,37 @@ public class LightingWithLamps extends Lighting{
 	public void setState(Integer state) {
 		this.state = state;
 	}
-	
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
+	}
+
+	@Override
+	public String getProjectId() {
+		return getProjectid();
+	}
+
+	public Integer getIsfault() {
+		return isfault;
+	}
+
+	public void setIsfault(Integer isfault) {
+		this.isfault = isfault;
+	}
+
+	@Override
+	public String getAreaId() {
+		return getAreaid();
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public String getAreaName() {
+		return areaName;
+	}
 }

@@ -70,7 +70,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, QueryWrapper<LightingWithLamps> wrapper,
 			UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
@@ -89,7 +89,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 	
 	@Override
-	public IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, QueryWrapper<LightingWithAds> wrapper,
 			UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
@@ -108,7 +108,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 	
 	@Override
-	public IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, QueryWrapper<LightingWithCamera> wrapper,
 			UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
@@ -128,7 +128,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 	
 	@Override
-	public IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, QueryWrapper<LightingWithAlarm> wrapper,
 			UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
@@ -147,7 +147,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 	
 	@Override
-	public IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper,
 			UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());
@@ -166,7 +166,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
+	public IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper, UserHolder user) {
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
@@ -186,7 +186,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper, UserHolder user) {
+	public IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper, UserHolder user) {
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
 		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
 		if (projectIds.isEmpty()) {
@@ -206,7 +206,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
-	public IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<Lighting> wrapper,
+	public IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<LightingWithEvse> wrapper,
 														   UserHolder user) {
 		// TODO Auto-generated method stub
 		System.out.println("sql:" + wrapper.getCustomSqlSegment());

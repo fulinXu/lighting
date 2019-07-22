@@ -81,6 +81,11 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     private Integer screenOnoff;
     @TableField("runningState")
     private Integer runningState;
+    /**
+     * @Fields modelNumber:(解除)布防
+     */
+    @TableField("relieved")
+    private Integer relieved;
 	@TableField("DZBH")
 	private String DZBH;// 编号
 	@TableField("DZMC")
@@ -99,6 +104,14 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
 
     @TableField(exist = false)
     private String areaName;
+
+    public Integer getRelieved() {
+        return relieved;
+    }
+
+    public void setRelieved(Integer relieved) {
+        this.relieved = relieved;
+    }
 
     public Integer getScreenOnoff() {
         return screenOnoff;

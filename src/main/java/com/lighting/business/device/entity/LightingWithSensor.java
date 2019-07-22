@@ -45,6 +45,8 @@ public class LightingWithSensor extends Lighting{
 	private Double water;
 	@TableField("deviceType")
 	private Integer deviceType;
+	@TableField("isfault")
+	private Integer isfault;
 	/**
 	 * 灯杆经度
 	 */
@@ -68,11 +70,19 @@ public class LightingWithSensor extends Lighting{
         return deviceType;
     }
 
-    public void setDeviceType(Integer deviceType) {
+	public Integer getIsfault() {
+		return isfault;
+	}
+
+	public void setIsfault(Integer isfault) {
+		this.isfault = isfault;
+	}
+
+	public void setDeviceType(Integer deviceType) {
         this.deviceType = deviceType;
     }
 
-    public String getAddress() {
+	public String getAddress() {
 		return address;
 	}
 

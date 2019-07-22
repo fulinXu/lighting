@@ -87,12 +87,13 @@ public class LightingWithAlarm extends Lighting{
 	private Date updateTime;
 	@TableField("deleted")
 	private Boolean deleted;
+	@TableField("alarm_stat")
+	private Integer alarmStat;
 	/**
 	 * 灯杆经度
 	 */
 	@TableField("lightingLatitude")
 	private String lightingLatitude;
-
 	/**
 	 * 灯杆纬度
 	 */
@@ -130,6 +131,14 @@ public class LightingWithAlarm extends Lighting{
 
 	public void setCameraUuid(String cameraUuid) {
 		this.cameraUuid = cameraUuid;
+	}
+
+	public Integer getAlarmStat() {
+		return alarmStat;
+	}
+
+	public void setAlarmStat(Integer alarmStat) {
+		this.alarmStat = alarmStat;
 	}
 
 	public String getProjectId() {

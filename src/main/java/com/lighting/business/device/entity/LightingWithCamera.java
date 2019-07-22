@@ -100,6 +100,8 @@ public class LightingWithCamera extends Lighting{
 	private Date updateTime;
 	@TableField("deleted")
 	private Boolean deleted;
+	@TableField("alarm_stat")
+	private Integer alarmStat;
 	/**
 	 * 灯杆经度
 	 */
@@ -124,6 +126,14 @@ public class LightingWithCamera extends Lighting{
 	}
 	public String getLightingLatitude() {
 		return lightingLatitude;
+	}
+
+	public Integer getAlarmStat() {
+		return alarmStat;
+	}
+
+	public void setAlarmStat(Integer alarmStat) {
+		this.alarmStat = alarmStat;
 	}
 
 	public void setLightingLatitude(String lightingLatitude) {

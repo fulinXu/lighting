@@ -26,14 +26,14 @@ public interface ILightingService extends IService<Lighting> {
 	
 	IPage<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, QueryWrapper<Lighting> wrapper,UserHolder user);
 	List<LightingWithOthers> getLightingListById(QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<Lighting> wrapper,UserHolder user);
-	IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<Lighting> wrapper, UserHolder user);
+	IPage<LightingWithLamps> getLampsListByLighting(Page<LightingWithLamps> page, QueryWrapper<LightingWithLamps> wrapper,UserHolder user);
+	IPage<LightingWithAds> getAdsListByLighting(Page<LightingWithAds> page, QueryWrapper<LightingWithAds> wrapper,UserHolder user);
+	IPage<LightingWithCamera> getCameraListByLighting(Page<LightingWithCamera> page, QueryWrapper<LightingWithCamera> wrapper,UserHolder user);
+	IPage<LightingWithAlarm> getAlarmListByLighting(Page<LightingWithAlarm> page, QueryWrapper<LightingWithAlarm> wrapper,UserHolder user);
+	IPage<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper,UserHolder user);
+	IPage<LightingWithSensor> getWeatherListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper,UserHolder user);
+	IPage<LightingWithSensor> getWaterListByLighting(Page<LightingWithSensor> page, QueryWrapper<LightingWithSensor> wrapper,UserHolder user);
+	IPage<LightingWithEvse> getEvseListByLighting(Page<LightingWithEvse> page, QueryWrapper<LightingWithEvse> wrapper, UserHolder user);
 	boolean adscreenBind(String adscreenId,QueryWrapper<Object> wrapper,String bindid);
 	boolean alarmboxBind(String alarmId,QueryWrapper<Object> wrapper,String bindid);
 	boolean cameraBind(String cameraId,QueryWrapper<Object> wrapper,String bindid);
