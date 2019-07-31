@@ -1,16 +1,39 @@
 package com.lighting.business.device.controller;
 
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.lighting.business.device.entity.*;
 import landsky.basic.feign.envir.EnvirFeignService;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,10 +71,15 @@ public class LightingController extends  BaseController{
 	
 	@Autowired
 	private ILightingService lightingService;
-//	@Autowired
-//	private EsClientUtil esClientUtil;
+
+	@Autowired
+	private RestHighLevelClient restHighLevelClient;
+
 	@Autowired
 	private EnvirFeignService sensorFeign;
+
+	private final String INDEX = "smartcity3307";
+	private final String TYPE = "t_lighting";
 	
 	@ApiOperation("获取灯杆的信息")
 	@ApiImplicitParams({ 
@@ -107,8 +135,27 @@ public class LightingController extends  BaseController{
 		}
 		wrapper.eq("l.isdeleted",0);
 		return lightingService.getLightingList(page, wrapper,getUser());
-	}	
-	
+	}
+
+	@PostMapping("/getLightingListByES")
+	public String getLightingListByES() throws  Exception{
+		GetRequest getRequest = new GetRequest();
+		getRequest.index(INDEX);
+		getRequest.type("_all");
+		getRequest.id();
+		restHighLevelClient.getAsync(getRequest, RequestOptions.DEFAULT, new ActionListener<GetResponse>() {
+			@Override
+			public void onResponse(GetResponse documentFields) {
+				System.out.println(documentFields.getSource());
+			}
+			@Override
+			public void onFailure(Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+		return null;
+	}
 	
 	@ApiOperation("通过灯杆获取灯具的信息")
 	@ApiImplicitParams({ 
@@ -442,6 +489,13 @@ public class LightingController extends  BaseController{
 		return  lightingService.getCoordinateByDevice(wrapper);
 	}
 
+    /**
+     * 获取所有设备数量
+     */
+    @GetMapping("/getAllDeviceNumberList")
+    public  ResultWrapper getAllDeviceNumberList(String projectid){
+        return  ResultWrapper.success().object(lightingService.getAllDeviceNumberList(projectid));
+    }
 
 	@ApiOperation("根据id获取灯杆的信息")
 	@ApiImplicitParams({ 

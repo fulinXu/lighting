@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.models.auth.In;
 import landsky.basic.cache.project.ProjectAreaCacheable;
 
 public class LightingWithOthers extends Lighting implements ProjectAreaCacheable {
 	@TableField("alias")
     private String alias;
+	@TableField("brightDeviceId")
+	private String brightDeviceId;
 	@TableField("adscreenName")
     private String adscreenName;
 	@TableField("device_alias")
@@ -81,6 +84,12 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     private Integer screenOnoff;
     @TableField("runningState")
     private Integer runningState;
+    @TableField("weatherIsFault")
+    private Integer weatherIsFault;
+    @TableField("brightIsFault")
+    private Integer brightIsFault;
+    @TableField("waterIsFault")
+    private Integer waterIsFault;
     /**
      * @Fields modelNumber:(解除)布防
      */
@@ -105,7 +114,15 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     @TableField(exist = false)
     private String areaName;
 
-    public Integer getRelieved() {
+	public String getBrightDeviceId() {
+		return brightDeviceId;
+	}
+
+	public void setBrightDeviceId(String brightDeviceId) {
+		this.brightDeviceId = brightDeviceId;
+	}
+
+	public Integer getRelieved() {
         return relieved;
     }
 
@@ -183,6 +200,30 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
 
 	public void setCameraUuid(String cameraUuid) {
 		this.cameraUuid = cameraUuid;
+	}
+
+	public Integer getWeatherIsFault() {
+		return weatherIsFault;
+	}
+
+	public void setWeatherIsFault(Integer weatherIsFault) {
+		this.weatherIsFault = weatherIsFault;
+	}
+
+	public Integer getBrightIsFault() {
+		return brightIsFault;
+	}
+
+	public void setBrightIsFault(Integer brightIsFault) {
+		this.brightIsFault = brightIsFault;
+	}
+
+	public Integer getWaterIsFault() {
+		return waterIsFault;
+	}
+
+	public void setWaterIsFault(Integer waterIsFault) {
+		this.waterIsFault = waterIsFault;
 	}
 
 	public String getAlarmboxUuid() {

@@ -581,6 +581,8 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
         if (projectId!=null&&!"".equals(projectId)){
             wrapper.eq("projectId",projectId);
         }
+		wrapper.isNotNull("sensorid");
+		wrapper.ne("sensorid","");
 		wrapper.eq("isdeleted",0);
 		int current = (pageIndex-1)*pageSize;
 		List<Lighting> lightings= (List<Lighting>) baseMapper.selectListPage(wrapper,current,pageSize);
@@ -713,6 +715,12 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	    map.put("longitude",lighting.getLongitude());
 	    map.put("latitude",lighting.getLatitude());
         return map;
+    }
+
+    @Override
+    public Map<String, Integer> getAllDeviceNumberList(String projectid) {
+//
+        return baseMapper.getAllDeviceNumberList(projectid);
     }
 
 

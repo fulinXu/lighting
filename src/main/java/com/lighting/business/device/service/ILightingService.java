@@ -67,4 +67,5 @@ public interface ILightingService extends IService<Lighting> {
 	Boolean isBinding(QueryWrapper<Lighting> wrapper);
 	Boolean isEqArea(String[] deviceIds,String projectid,String areaid);
 	Map<String,Double> getCoordinateByDevice(QueryWrapper<Lighting> wrapper);
+	Map<String,Integer>  getAllDeviceNumberList(String projectid);
 }
