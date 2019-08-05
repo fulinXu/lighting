@@ -72,8 +72,8 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	@Select("SELECT  n.*,l.latitude As lightingLatitude,l.longitude As lightinglongitude,l.address, l.LIGHTINGNAME  FROM  (select * from t_lighting  WHERE ISDELETED = 0) l  RIGHT JOIN ("
 			+ "SELECT  d.device_type,d.deleted,d.device_id,d.project_id,d.area_id,d.device_name As deviceName,d.`status`,w.temperature,w.density_gas As densityGas,w.pm25,w.pm10,w.co2,w.temperature_soil As temperatureSoil,w.noise,w.illuminate,w.humidity,w.humidity_soil As humiditySoil,w.atmospheric_pressure As atmosphericPressure,w.create_time As weatherrecordtime,h.create_time As waterrecordtime,h.water  "
 			+ " FROM t_envir_devices d"
-			+ " LEFT JOIN t_evir_weather_only w ON d.device_id = w.device_id "
-			+ " LEFT JOIN t_envir_hydrops_only h ON d.device_id = h.device_id"
+			+ " LEFT JOIN t_evir_weather_only w ON d.onenet_id = w.device_id "
+			+ " LEFT JOIN t_envir_hydrops_only h ON d.onenet_id = h.device_id"
 			+ ")  n ON n.device_id = l.SENSORID  "
 			+ "${ew.customSqlSegment}")
 	List<LightingWithSensor> getSensorListByLighting(Page<LightingWithSensor> page, @Param("ew") Wrapper<LightingWithSensor> wrapper);
@@ -168,17 +168,17 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	List<LightingWithCamera> getCameraNotBind(@Param("ew") QueryWrapper<Lighting> wrapper);
 
 	@Select("select " +
-			"(select count(1) from t_bright where isdeleted = 0 and projectid = '${projectid}') as brightsNum, " +
-			"(SELECT COUNT(1) from t_ad_screen_device where deleted = 0 and project_id = '${projectid}') As adsNum, " +
-			"(select COUNT(1) from t_lighting WHERE isdeleted = 0 and projectid = '${projectid}') As lightingsNum, " +
-			"(SELECT COUNT(1) from camera where deleted = 0 and project_id = '${projectid}') As camerasNum, " +
-			"(SELECT COUNT(1) from alarm_box where deleted = 0 and project_id = '${projectid}') As alarmBoxsNum, " +
-			"(SELECT COUNT(1) from t_evse_device where deleted = 0 and project_id = '${projectid}') As evsesNum, " +
-			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and project_id = '${projectid}') As sensorsNum, " +
-			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type != 1 and project_id = '${projectid}') As watersNum, " +
-			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type != 2 and project_id = '${projectid}') As weathersNum " +
+			"(select count(1) from t_bright where isdeleted = 0 and projectid = '${projectid}' and projectid in (${projectids}) and areaid in (${areaids})) as brightsNum, " +
+			"(SELECT COUNT(1) from t_ad_screen_device where deleted = 0 and project_id = '${projectid}' and project_id in (${projectids}) and area_id in (${areaids})) As adsNum, " +
+			"(select COUNT(1) from t_lighting WHERE isdeleted = 0 and projectid = '${projectid}'  and projectid in (${projectids}) and areaid in (${areaids})) As lightingsNum, " +
+			"(SELECT COUNT(1) from camera where deleted = 0 and project_id = '${projectid}' and state <> 3  and project_id in (${projectids}) and area_id in (${areaids})) As camerasNum, " +
+			"(SELECT COUNT(1) from alarm_box where deleted = 0 and project_id = '${projectid}' and state <> 3  and project_id in (${projectids}) and area_id in (${areaids})) As alarmBoxsNum, " +
+			"(SELECT COUNT(1) from t_evse_device where deleted = 0 and project_id = '${projectid}' and project_id in (${projectids}) and area_id in (${areaids})) As evsesNum, " +
+			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and project_id = '${projectid}' and project_id in (${projectids}) and area_id in (${areaids})) As sensorsNum, " +
+			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (2,3) and project_id = '${projectid}' and project_id in (${projectids}) and area_id in (${areaids})) As watersNum, " +
+			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (1,3) and project_id = '${projectid}' and project_id in (${projectids}) and area_id in (${areaids})) As weathersNum " +
 			" from dual ")
-	Map<String,Integer> getAllDeviceNumberList(@Param("projectid") String projectid);
+	Map<String,Integer> getAllDeviceNumberList(@Param("projectid") String projectid,@Param("projectids") String projectids,@Param("areaids") String areaids);
 
 	@Select("select * from t_lighting  ${ew.customSqlSegment} limit #{current}, #{pageSize}")
 	List<Lighting>  selectListPage(@Param("ew") QueryWrapper<Lighting> wrapper, @Param("current") int current, @Param("pageSize") int pageSize);

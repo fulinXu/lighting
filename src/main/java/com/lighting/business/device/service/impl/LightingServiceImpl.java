@@ -719,8 +719,25 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 
     @Override
     public Map<String, Integer> getAllDeviceNumberList(String projectid) {
-//
-        return baseMapper.getAllDeviceNumberList(projectid);
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(UserHolder.getUser().getId());
+		String projectids = "";
+		String areaids = "";
+		if (projectIds.isEmpty()) {
+			return null;
+		}else {
+			for(String proid:projectIds){
+				projectids=projectids+"'"+proid+"',";
+			}
+		}
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(UserHolder.getUser().getId());
+		if (areaIds.isEmpty()) {
+			return null;
+		}else {
+			for(String areid:areaIds){
+				areaids=areaids+"'"+areid+"',";
+			}
+		}
+        return baseMapper.getAllDeviceNumberList(projectid,projectids.substring(0,projectids.length()-1),areaids.substring(0,areaids.length()-1));
     }
 
 

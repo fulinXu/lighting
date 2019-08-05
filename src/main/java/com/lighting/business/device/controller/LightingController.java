@@ -871,7 +871,7 @@ public class LightingController extends  BaseController{
 		}
 		String useSensorId = lightingService.getSensorIdByLighting(areaId, projectId,lightingid);
 		if (useSensorId==null){
-		    return  ResultWrapper.success().object("该灯杆未绑定工控机");
+		    return  ResultWrapper.failure().object("该灯杆未绑定工控机");
         }
 		return ResultWrapper.success().object(sensorFeign.getJsonDailyPowerStateLog(start, end, lightingService.getSensorIdByLighting(areaId, projectId,lightingid),pageIndex,pageSize));
 	}
@@ -902,7 +902,7 @@ public class LightingController extends  BaseController{
 		page.setCurrent(pageIndex);
 		page.setTotal(total);
 		int pages = 0;
-		if (total%pageSize==0){
+		if (total%pageSize==0){0
 			pages = total/pageSize;
 		}
 		else {
