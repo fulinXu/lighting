@@ -9,31 +9,25 @@ import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+//import com.lighting.business.config.RabbitConfig;
 import com.lighting.business.device.entity.*;
+import io.swagger.models.auth.In;
+import landsky.basic.feign.adscreen.AdScreenFeignService;
+import landsky.basic.feign.alarm.AlarmFeignService;
+import landsky.basic.feign.bright.BrightFeignService;
+import landsky.basic.feign.camera.CameraFeignService;
 import landsky.basic.feign.envir.EnvirFeignService;
-import org.elasticsearch.action.ActionListener;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchRequestBuilder;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,11 +66,29 @@ public class LightingController extends  BaseController{
 	@Autowired
 	private ILightingService lightingService;
 
-	@Autowired
-	private RestHighLevelClient restHighLevelClient;
+//	@Autowired
+//	private ElasticsearchTemplate elasticsearchTemplate;
 
 	@Autowired
 	private EnvirFeignService sensorFeign;
+
+	@Autowired
+	private AdScreenFeignService adScreenFeignService;
+
+	@Autowired
+	private BrightFeignService brightFeignService;
+
+	@Autowired
+	private CameraFeignService cameraFeignService;
+
+	@Autowired
+	private AlarmFeignService alarmFeignService;
+//
+//	@Autowired
+//    private AmqpTemplate amqpTemplate;
+//
+//	@Autowired
+//	private RabbitTemplate rabbitTemplate;
 
 	private final String INDEX = "smartcity3307";
 	private final String TYPE = "t_lighting";
@@ -137,25 +149,19 @@ public class LightingController extends  BaseController{
 		return lightingService.getLightingList(page, wrapper,getUser());
 	}
 
-	@PostMapping("/getLightingListByES")
-	public String getLightingListByES() throws  Exception{
-		GetRequest getRequest = new GetRequest();
-		getRequest.index(INDEX);
-		getRequest.type("_all");
-		getRequest.id();
-		restHighLevelClient.getAsync(getRequest, RequestOptions.DEFAULT, new ActionListener<GetResponse>() {
-			@Override
-			public void onResponse(GetResponse documentFields) {
-				System.out.println(documentFields.getSource());
-			}
-			@Override
-			public void onFailure(Exception e) {
-				e.printStackTrace();
-			}
-		});
-
-		return null;
-	}
+//	@PostMapping("/getLightingListByES")
+//	public String getLightingListByES() throws  Exception{
+//        // 构造搜索条件
+//        QueryBuilder builder=QueryBuilders.existsQuery("lightingid");
+//        SearchQuery searchQuery=new NativeSearchQueryBuilder().withQuery(builder).build();
+//        // 执行查询
+//        List<Lighting> lightings=elasticsearchTemplate.queryForList(searchQuery,Lighting.class);
+//        for(Lighting lighting:lightings){
+//            System.out.println(lighting);
+//        }
+//        return "Search Success";
+//
+//	}
 	
 	@ApiOperation("通过灯杆获取灯具的信息")
 	@ApiImplicitParams({ 
@@ -325,7 +331,7 @@ public class LightingController extends  BaseController{
 		}
 		return lightingService.getWaterListByLighting(page, wrapper, getUser());
 	}
-	
+
 	@ApiOperation("通过模糊查询灯杆获取灯具的信息")
 	@ApiImplicitParams({ 
 	})
@@ -493,8 +499,8 @@ public class LightingController extends  BaseController{
      * 获取所有设备数量
      */
     @GetMapping("/getAllDeviceNumberList")
-    public  ResultWrapper getAllDeviceNumberList(String projectid){
-        return  ResultWrapper.success().object(lightingService.getAllDeviceNumberList(projectid));
+    public  ResultWrapper getAllDeviceNumberList(String projectid,String areaid){
+        return  ResultWrapper.success().object(lightingService.getAllDeviceNumberList(projectid,areaid));
     }
 
 	@ApiOperation("根据id获取灯杆的信息")
@@ -801,7 +807,14 @@ public class LightingController extends  BaseController{
 	public  IPage<LightingWithLamps>  brightNotBind(Page<LightingWithLamps> page,Lighting lighting) {
 		return lightingService.getBrightNotBind(page, getUser(),lighting);
 	}
-	
+	/**
+	 * 获取未绑定的音柱信息
+	 */
+	@GetMapping("/sponNotBind")
+	public  IPage<LightingWithSpon>  sponNotBind(Page<LightingWithSpon> page,Lighting lighting){
+		return lightingService.getSponNotBind(page,getUser(),lighting);
+	}
+
 	@GetMapping("/getLightingByIds")
 	public List<Map<String,Object>> getLightingByIds(String[] deviceIds,String projectid,String areaid) {
 		Lighting lighting = new Lighting();
@@ -902,7 +915,7 @@ public class LightingController extends  BaseController{
 		page.setCurrent(pageIndex);
 		page.setTotal(total);
 		int pages = 0;
-		if (total%pageSize==0){0
+		if (total%pageSize==0){
 			pages = total/pageSize;
 		}
 		else {
@@ -911,5 +924,43 @@ public class LightingController extends  BaseController{
 		page.setPages(pages);
 		return page;
 	}
+
+//	@PostMapping("/sendMsg")
+//    public void sendMsg(String content) {
+//        CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
+//        //把消息放入ROUTINGKEY_A对应的队列当中去，对应的是队列A
+//        amqpTemplate.convertAndSend(RabbitConfig.EXCHANGE_A,RabbitConfig.ROUTINGKEY_A, content);
+////        rabbitTemplate.setDefaultReceiveQueue(content);
+//    }
+//
+//
+//	@GetMapping("/directSend")
+//	public void directSend() {
+//		String message="direct 发送消息";
+//		System.out.println("hhhhhhhhhhhhhhhhhhhhhhh");
+//		rabbitTemplate.convertAndSend("DirectExchange","DirectKey",
+//				message, new CorrelationData(UUID.randomUUID().toString()));
+//	}
+
+	@GetMapping("/allDeviceStates")
+	public ResultWrapper allDeviceStates(@RequestParam("projectId") String projectId){
+		String orgId = projectId;
+		Map<String,Object>  adMap = (Map<String, Object>) adScreenFeignService.getAdScreenDeviceStatusCount(projectId).getObject();
+		Map<String,Object>  alarmMap = (Map<String, Object>) alarmFeignService.countByProjectId(orgId).getObject();
+		Map<String,Object> cameraMap = (Map<String, Object>) cameraFeignService.countByProjectId(orgId).getObject();
+		Map<String,Object> brightMap = (Map<String, Object>) brightFeignService.getRateOfLighting(projectId).getObject();
+		Map<String,Object> sensorMap = sensorFeign.getDeviceStatusListForLighting(projectId);
+		Map<String,Integer> allDeviceState = new HashMap<>();
+		Integer online = (Integer)adMap.get("online")+(Integer)alarmMap.get("onlineNum")+(Integer)cameraMap.get("onlineNum")+(Integer)brightMap.get("online")+(Integer)sensorMap.get("on");
+		Integer offline = (Integer)adMap.get("offline")+(Integer) alarmMap.get("offlineNum")+(Integer)cameraMap.get("offlineNum")+(Integer)brightMap.get("offline")+(Integer)sensorMap.get("off");
+		Integer faultNum = (Integer)adMap.get("broken")+(Integer)alarmMap.get("faultNum")+(Integer)cameraMap.get("faultNum")+(Integer)brightMap.get("isfault")+(Integer)sensorMap.get("fault");
+		Integer total = (Integer)adMap.get("total")+(Integer)alarmMap.get("totalNum")+(Integer)cameraMap.get("totalNum")+(Integer)brightMap.get("total")+(Integer)sensorMap.get("on")+(Integer)sensorMap.get("off");
+		allDeviceState.put("online",online);
+		allDeviceState.put("offline",offline);
+		allDeviceState.put("faultNum",faultNum);
+		allDeviceState.put("total",total);
+		return  ResultWrapper.success().object(allDeviceState);
+	}
+
 }
 

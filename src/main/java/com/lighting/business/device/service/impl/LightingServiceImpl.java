@@ -506,6 +506,23 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 	}
 
 	@Override
+	public IPage<LightingWithSpon> getSponNotBind(Page<LightingWithSpon> page, UserHolder user, Lighting lighting) {
+		QueryWrapper<Lighting> wrapper = new QueryWrapper<>();
+		wrapper.eq("t_terminal.project_id",lighting.getProjectid());
+		wrapper.eq("t_terminal.area_id",lighting.getAreaid());
+		wrapper.eq("t_terminal.type",2);
+		List<String> projectIds = projectFeignService.getProjectIdsByUserId(user.getId());
+		if (projectIds.isEmpty()) {
+			return null;
+		}
+		List<String> areaIds = projectFeignService.getAreaIdsByUserId(user.getId());
+		if (areaIds.isEmpty()) {
+			return null;
+		}
+		return page.setRecords(baseMapper.getSponNotBind(wrapper));
+	}
+
+	@Override
 	public Map<String, Object> getLighting(Lighting lighting, QueryWrapper<Lighting> wrapper) {
 		// TODO Auto-generated method stub
 		if(lighting.getProjectid()!=null&&!"".equals(lighting.getProjectid())) {
@@ -718,7 +735,7 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
     }
 
     @Override
-    public Map<String, Integer> getAllDeviceNumberList(String projectid) {
+    public Map<String, Integer> getAllDeviceNumberList(String projectid,String areaid) {
 		List<String> projectIds = projectFeignService.getProjectIdsByUserId(UserHolder.getUser().getId());
 		String projectids = "";
 		String areaids = "";
@@ -737,7 +754,10 @@ public class LightingServiceImpl extends ServiceImpl<LightingMapper, Lighting> i
 				areaids=areaids+"'"+areid+"',";
 			}
 		}
-        return baseMapper.getAllDeviceNumberList(projectid,projectids.substring(0,projectids.length()-1),areaids.substring(0,areaids.length()-1));
+		if(areaid!=null&&!"".equals(areaid)){
+			return baseMapper.getAllDeviceNumberList(projectid,areaid,projectids.substring(0,projectids.length()-1),areaids.substring(0,areaids.length()-1));
+		}
+		return baseMapper.getAllDeviceNumberListByArea(projectid,projectids.substring(0,projectids.length()-1),areaids.substring(0,areaids.length()-1));
     }
 
 

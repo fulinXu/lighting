@@ -53,7 +53,7 @@ public class LightingWithAlarm extends Lighting{
 	 * @Fields modelNumber:型号
 	 */
 	@TableField("model_number")
-	private String modelNumber;
+	private String model_number;
 
 	@TableField("camera_uuid")
 	private String cameraUuid;
@@ -183,12 +183,15 @@ public class LightingWithAlarm extends Lighting{
 	public void setDeviceAlias(String deviceAlias) {
 		this.deviceAlias = deviceAlias;
 	}
-	public String getModelNumber() {
-		return modelNumber;
+
+	public String getModel_number() {
+		return model_number;
 	}
-	public void setModelNumber(String modelNumber) {
-		this.modelNumber = modelNumber;
+
+	public void setModel_number(String model_number) {
+		this.model_number = model_number;
 	}
+
 	public String getMemory() {
 		return memory;
 	}

@@ -55,6 +55,7 @@ public interface ILightingService extends IService<Lighting> {
 	IPage<LightingWithAlarm> getAlarmNotBind(Page<LightingWithAlarm> page,UserHolder user,Lighting lighting);
 	IPage<LightingWithSensor> getSensorNotBind(Page<LightingWithSensor> page,UserHolder user,Lighting lighting);
 	List<Map<String,Object>> getLightingByIds(List<String> lightingIds,Lighting lighting);
+	IPage<LightingWithSpon> getSponNotBind(Page<LightingWithSpon> page,UserHolder user,Lighting lighting);
 	Map<String,Object> getLighting(Lighting lighting,QueryWrapper<Lighting> wrapper);
 	ResultWrapper getCountByAreaId(QueryWrapper<Lighting> wrapper,UserHolder user);
 	ResultWrapper getLightingListAll(UserHolder user,String projectId,String areaId);
@@ -67,5 +68,5 @@ public interface ILightingService extends IService<Lighting> {
 	Boolean isBinding(QueryWrapper<Lighting> wrapper);
 	Boolean isEqArea(String[] deviceIds,String projectid,String areaid);
 	Map<String,Double> getCoordinateByDevice(QueryWrapper<Lighting> wrapper);
-	Map<String,Integer>  getAllDeviceNumberList(String projectid);
+	Map<String,Integer>  getAllDeviceNumberList(String projectid,String areaid);
 }

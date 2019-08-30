@@ -107,12 +107,43 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     private String startTime;
     @TableField("endTime")
     private String endTime;
+    @TableField("sponId")
+    private String sponId;
+    @TableField("sponName")
+    private String sponName;
 
     @TableField(exist = false)
     private String projectName;
 
     @TableField(exist = false)
     private String areaName;
+    //音柱输出音量
+    @TableField("tbcoutv")
+    private String tbcoutv;
+
+	public String getTbcoutv() {
+		return tbcoutv;
+	}
+
+	public void setTbcoutv(String tbcoutv) {
+		this.tbcoutv = tbcoutv;
+	}
+
+	public String getSponId() {
+		return sponId;
+	}
+
+	public void setSponId(String sponId) {
+		this.sponId = sponId;
+	}
+
+	public String getSponName() {
+		return sponName;
+	}
+
+	public void setSponName(String sponName) {
+		this.sponName = sponName;
+	}
 
 	public String getBrightDeviceId() {
 		return brightDeviceId;

@@ -82,6 +82,8 @@ public class LightingWithLamps extends Lighting implements ProjectAreaCacheable 
     private Integer state;
 	@TableField("isfault")
 	private Integer isfault;
+	@TableField("UPLOAD_TIME")
+	private Date uploadTime;
 	/**
 	 * 灯杆经度
 	 */
@@ -106,6 +108,14 @@ public class LightingWithLamps extends Lighting implements ProjectAreaCacheable 
 
 	@TableField(exist = false)
 	private String areaName;
+
+	public Date getUploadTime() {
+		return uploadTime;
+	}
+
+	public void setUploadTime(Date uploadTime) {
+		this.uploadTime = uploadTime;
+	}
 
 	public String getAddress() {
 		return address;

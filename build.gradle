@@ -47,8 +47,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation('org.apache.velocity:velocity-engine-core:2.0')
-	compile 'org.elasticsearch:elasticsearch:6.5.4'
-	compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.4'
+    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+    compile("org.elasticsearch.plugin:transport-netty3-client:5.6.10")
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation project(':landsky-basic')
 }
 dependencyManagement {

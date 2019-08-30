@@ -87,7 +87,7 @@ public class LightingWithCamera extends Lighting{
 	@TableField("id")
 	private String  id;
 
-	@TableField("camera_uuid")
+	@TableField("cameraUuid")
 	private String cameraUuid;
 	/**
 	 * @Fields remark:备注
@@ -147,6 +147,7 @@ public class LightingWithCamera extends Lighting{
 	public void setLightinglongitude(String lightinglongitude) {
 		this.lightinglongitude = lightinglongitude;
 	}
+
 	public String getCameraUuid() {
 		return cameraUuid;
 	}

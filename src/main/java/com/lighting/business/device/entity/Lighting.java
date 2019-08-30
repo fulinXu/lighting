@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 
@@ -16,6 +21,8 @@ import java.io.Serializable;
  * @since 2019-01-26
  */
 @TableName("t_lighting")
+@Document(indexName = "smartcity3307",type = "t_lighting")
+//@Repository
 public class Lighting  implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,96 +32,119 @@ public class Lighting  implements Serializable {
      */
     @TableId(type=IdType.UUID)
     @TableField("LIGHTINGID")
+    @Id
     private String lightingid;
 
     /**
      * 灯杆序号
      */
     @TableField("ORDERNUMBER")
+    @Field(type = FieldType.Text)
     private String ordernumber;
 
     /**
      * 灯杆名称
      */
     @TableField("LIGHTINGNAME")
+    @Field(type = FieldType.Text)
     private String lightingname;
 
     /**
      * 区域id
      */
     @TableField("AREAID")
+    @Field(type = FieldType.Text)
     private String areaid;
 
     /**
      * 项目id
      */
     @TableField("PROJECTID")
+    @Field(type = FieldType.Text)
     private String projectid;
 
     /**
      * 灯杆型号
      */
     @TableField("LIGHTINGMODEL")
+    @Field(type = FieldType.Text)
     private String lightingmodel;
 
     /**
      * 灯具id
      */
     @TableField("LAMPSID")
+    @Field(type = FieldType.Text)
     private String lampsid;
 
     /**
      * 广告屏id
      */
     @TableField("ADSCREENID")
+    @Field(type = FieldType.Text)
     private String adscreenid;
 
     /**
      * 摄像头id
      */
     @TableField("CAMERAID")
+    @Field(type = FieldType.Text)
     private String cameraid;
 
     /**
      * 一键报警盒id
      */
     @TableField("ALARMBOXID")
+    @Field(type = FieldType.Text)
     private String alarmboxid;
 
     /**
      * 气象站id
      */
     @TableField("WEATHERID")
+    @Field(type = FieldType.Text)
     private String weatherid;
 
     /**
      * 积水传感器id
      */
     @TableField("SENSORID")
+    @Field(type = FieldType.Text)
     private String sensorid;
 
     /**
      * 备注
      */
     @TableField("REMARK")
+    @Field(type = FieldType.Text)
     private String remark;
     
     /**
      * 经度
      */
     @TableField("LONGITUDE")
+    @Field(type = FieldType.Float)
     private Double longitude;
     
     @TableField("ISDELETED")
+    @Field(type = FieldType.Long)
     private Integer isdeleted;
 
     @TableField("address")
+    @Field(type = FieldType.Text)
     private String address;
     /**
      * 纬度
      */
     @TableField("LATITUDE")
+    @Field(type = FieldType.Float)
     private Double latitude;
+
+    public Lighting(String s, String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8, String s9, String s10, String s11, String s12, double v, int i, String s13, double v1) {
+    }
+
+    public Lighting() {
+    }
 
     public String getAddress() {
         return address;
