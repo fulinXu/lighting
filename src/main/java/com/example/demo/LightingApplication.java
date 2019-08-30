@@ -12,7 +12,6 @@ import landsky.basic.LandskyBasic;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-
 @SpringBootApplication
 @EnableSwagger2
 //服务间调用方法的注解
