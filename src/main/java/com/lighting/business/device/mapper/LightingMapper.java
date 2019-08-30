@@ -30,7 +30,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	 * @param wrapper
 	 * @return
 	 */
-	@Select("select t.id As sponId,t.tname As sponName,t.tbcoutv,n.device_id As brightDeviceId,b.relieved,v.DZBH,v.status As evseStatus,v.DZMC,v.GZZT,l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
+	@Select("select t.is_online As isOnline,t.id As sponId,t.tname As sponName,t.tbcoutv,n.device_id As brightDeviceId,b.relieved,v.DZBH,v.status As evseStatus,v.DZMC,v.GZZT,l.*,a.device_name  as adscreenName,a.card_number as cardNumber,c.device_alias  as  deviceAliasc,b.device_alias as alarmboxName,d.device_name as sensorName,l.LIGHTINGNAME,	n.ON_OFF  as  onOff,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS` from t_lighting l "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
@@ -42,7 +42,7 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 	        + " order by AREAID,PROJECTID")
 	List<LightingWithOthers> getLightingList(Page<LightingWithOthers> page, @Param("ew") Wrapper<Lighting> wrapper);
 	
-	@Select("select t.id As sponId,t.tname As sponName,t.tbcoutv,d.is_fault As weatherIsFault,n.isfault As brightIsFault,f.is_fault As waterIsFault,b.relieved,a.running_state As runningState,a.screen_onoff As screenOnoff,v.DZBH,v.status As evseStatus,v.startTime,v.endTime,v.DZMC,v.GZZT,l.*,n.voltage,c.state As cameraState,c.camera_uuid As cameraUuid,b.camera_uuid As alarmboxUuid,b.state As alarmState,n.verify_code As verifyCode,n.current_level As currentLevel,n.powerfactor,a.device_name,d.air_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  deviceAliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,a.device_name AS adscreenName,f.water from t_lighting l  "
+	@Select("select t.is_online As isOnline,t.id As sponId,t.tname As sponName,t.tbcoutv,d.is_fault As weatherIsFault,n.isfault As brightIsFault,f.is_fault As waterIsFault,b.relieved,a.running_state As runningState,a.screen_onoff As screenOnoff,v.DZBH,v.status As evseStatus,v.startTime,v.endTime,v.DZMC,v.GZZT,l.*,n.voltage,c.state As cameraState,c.camera_uuid As cameraUuid,b.camera_uuid As alarmboxUuid,b.state As alarmState,n.verify_code As verifyCode,n.current_level As currentLevel,n.powerfactor,a.device_name,d.air_pressure As atmosphericPressure,d.temperature_soil As temperatureSoil,d.humidity_soil As humiditySoil,d.pm25,d.pm10,d.co2,d.density_gas As densityGas,d.illuminate,d.noise,n.platform_id As platformId,d.create_time As weatherCreateTime,f.create_time As waterCreateTime,d.`status` AS  sensorStatus,c.device_alias  as  deviceAliasc,c.state AS camera_state,b.device_alias AS alarmboxName,d.device_name  AS sensorName,d.temperature,d.humidity,d.device_id,l.LIGHTINGNAME,	n.ON_OFF,n.BRIGHTNESS,n.NODE_ID,n.ALIAS,n.`STATUS`,a.device_name AS adDeviceName,a.device_name AS adscreenName,f.water from t_lighting l  "
 			+ "left join (select * from t_ad_screen_device where deleted = 0) a on l.ADSCREENID=a.id "
 			+ "left join (select * from camera where deleted = 0 and state!=3) c on l.CAMERAID=c.id "
 			+ "left join (select * from alarm_box where deleted = 0) b on l.ALARMBOXID=b.id "
@@ -185,7 +185,10 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (2,3) and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As watersNum, " +
 			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (1,3) and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As weathersNum, " +
 			"(SELECT COUNT(1) from t_manhole_cover where deleted = 0 and project_id = '${projectid}' and area_id ='${areaid}'   and project_id in (${projectids}) and area_id in (${areaids})) As manholeCoverNum, " +
-			"(SELECT COUNT(1) from t_trash_can where deleted = 0 and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As trashCanNum" +
+			"(SELECT COUNT(1) from t_trash_can where deleted = 0 and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As trashCanNum," +
+			"(SELECT COUNT(1) from t_terminal where  project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As sponNum," +
+			"(SELECT COUNT(1) from door_ctrl_dev where deleted = 0 and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As doorDevNum," +
+			"(SELECT COUNT(1) from t_smoke where deleted = 0 and project_id = '${projectid}' and area_id ='${areaid}'  and project_id in (${projectids}) and area_id in (${areaids})) As smokeNum" +
 			" from dual ")
 	Map<String,Integer> getAllDeviceNumberList(@Param("projectid") String projectid,@Param("areaid") String areaid,@Param("projectids") String projectids,@Param("areaids") String areaids);
 
@@ -200,7 +203,10 @@ public interface LightingMapper extends BaseMapper<Lighting> {
 			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (2,3) and project_id = '${projectid}'   and project_id in (${projectids}) and area_id in (${areaids})) As watersNum, " +
 			"(SELECT COUNT(1) from t_envir_devices where deleted = 0 and device_type in (1,3) and project_id = '${projectid}'   and project_id in (${projectids}) and area_id in (${areaids})) As weathersNum, " +
 			"(SELECT COUNT(1) from t_manhole_cover where deleted = 0 and project_id = '${projectid}'    and project_id in (${projectids}) and area_id in (${areaids})) As manholeCoverNum, " +
-			"(SELECT COUNT(1) from t_trash_can where deleted = 0 and project_id = '${projectid}'   and project_id in (${projectids}) and area_id in (${areaids})) As trashCanNum" +
+			"(SELECT COUNT(1) from t_trash_can where deleted = 0 and project_id = '${projectid}'   and project_id in (${projectids}) and area_id in (${areaids})) As trashCanNum," +
+			"(SELECT COUNT(1) from t_terminal where  project_id = '${projectid}'  and project_id in (${projectids}) and area_id in (${areaids})) As sponNum," +
+			"(SELECT COUNT(1) from door_ctrl_dev where deleted = 0 and project_id = '${projectid}'  and project_id in (${projectids}) and area_id in (${areaids})) As doorDevNum," +
+			"(SELECT COUNT(1) from t_smoke where deleted = 0 and project_id = '${projectid}'  and project_id in (${projectids}) and area_id in (${areaids})) As smokeNum" +
 			" from dual ")
 	Map<String,Integer> getAllDeviceNumberListByArea(@Param("projectid") String projectid,@Param("projectids") String projectids,@Param("areaids") String areaids);
 

@@ -111,7 +111,8 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     private String sponId;
     @TableField("sponName")
     private String sponName;
-
+    @TableField("isOnline")
+    private  String isOnline;
     @TableField(exist = false)
     private String projectName;
 
@@ -120,6 +121,14 @@ public class LightingWithOthers extends Lighting implements ProjectAreaCacheable
     //音柱输出音量
     @TableField("tbcoutv")
     private String tbcoutv;
+
+	public String getIsOnline() {
+		return isOnline;
+	}
+
+	public void setIsOnline(String isOnline) {
+		this.isOnline = isOnline;
+	}
 
 	public String getTbcoutv() {
 		return tbcoutv;

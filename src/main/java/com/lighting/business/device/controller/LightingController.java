@@ -148,7 +148,7 @@ public class LightingController extends  BaseController{
 		wrapper.eq("l.isdeleted",0);
 		return lightingService.getLightingList(page, wrapper,getUser());
 	}
-
+//
 //	@PostMapping("/getLightingListByES")
 //	public String getLightingListByES() throws  Exception{
 //        // 构造搜索条件
@@ -932,8 +932,18 @@ public class LightingController extends  BaseController{
 //        amqpTemplate.convertAndSend(RabbitConfig.EXCHANGE_A,RabbitConfig.ROUTINGKEY_A, content);
 ////        rabbitTemplate.setDefaultReceiveQueue(content);
 //    }
-//
-//
+
+//	@PostMapping("/rabbit-queue-add")
+//	public ResultWrapper addQueue(@RequestParam String name) {
+//		rabbitMQ.addQueue(name);
+//		return ResultWrapper.success().messageAdd();
+//	}
+
+//	@PostMapping("/send")
+//	public ResultWrapper send(String name,String o) {
+//		rabbitMQ.send(name,o);
+//		return ResultWrapper.success().messageAdd();
+//	}
 //	@GetMapping("/directSend")
 //	public void directSend() {
 //		String message="direct 发送消息";
